@@ -1,7 +1,7 @@
 /* SpinnerPlugin - IOS side of the bridge to nativeSpinner JavaScript for PhoneGap
  *
- * @author WizCorp Inc. [ Incorporated Wizards ] 
- * @copyright 2011
+ * @author Ally Ogilvie
+ * @copyright WizCorp Inc. [ Incorporated Wizards ] 2011
  * @file SpinnerPlugin.h for PhoneGap
  *
  */
@@ -22,5 +22,6 @@
 - (void)create:(NSArray*)arguments withDict:(NSDictionary*)options;
 - (void)show:(NSArray*)arguments withDict:(NSDictionary*)options;
 - (void)hide:(NSArray*)arguments withDict:(NSDictionary*)options;
+- (void)rotate:(NSArray*)arguments withDict:(NSDictionary*)options;
 
 @end

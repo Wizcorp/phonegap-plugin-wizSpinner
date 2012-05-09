@@ -1,7 +1,7 @@
 /* SpinnerPlugin - IOS side of the bridge to nativeSpinner JavaScript for PhoneGap
  *
- * @author WizCorp Inc. [ Incorporated Wizards ] 
- * @copyright 2011
+ * @author Ally Ogilvie
+ * @copyright WizCorp Inc. [ Incorporated Wizards ] 2011
  * @file SpinnerPlugin.m for PhoneGap
  *
  */ 
@@ -48,58 +48,6 @@
     
     
     WizLog(@"WARNING  - - - - - nativeSpinner.create() is depreciated. Create is called from native by default.");
-    
-    
-    
-    
-    /*
-    // remove the splash spinner if existing
-    [self.appDelegate removeSplashLoader:NULL];
-    
-    if (options) 
-	{
-        
-        // get loader options
-        [self.appDelegate showSplashLoader:options];
-        [self.appDelegate updateLoaderLabel:@"this is a middle"];
-
-    } else {
-        
-        // default loader
-        [self.appDelegate showSplashLoader:NULL];
-        [self.appDelegate updateLoaderLabel:@"Loading..."];
-    }
-    */
-    
-    /*
-    container = [[UIView alloc] initWithFrame:originalWebViewBounds];
-    */
-    
-    
-    /*
-    activityLabel = [[UILabel alloc] init];
-    activityLabel.text = NSLocalizedString(@"Loading", @"string1");
-    activityLabel.textColor = [UIColor whiteColor];
-    activityLabel.font = [UIFont fontWithName:@"MarkerFelt-Thin" size:17];
-    [container addSubview:activityLabel];
-    activityLabel.frame = CGRectMake(0, 3, 70, 25);
-    */
-    
-    
-    /*
-    activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
-    [container addSubview:activityIndicator];
-    activityIndicator.frame = CGRectMake(originalWebViewBounds.size.width/2 - 15, originalWebViewBounds.size.height/2 - 15, 30, 30);
- 
-    [self.webView.superview addSubview:container];
-    //container.center = CGPointMake(originalWebViewBounds.size.width/2, originalWebViewBounds.size.height/2);
-    //self.view.backgroundColor = [UIColor whiteColor];
-    container.backgroundColor = [UIColor blackColor];
-    container.alpha = .5;
-    
-    container.hidden = YES;
-    NSLog(@"Spinner created");
-    */
     
 }
 
@@ -155,11 +103,17 @@
         return;
     }
     
-    WizLog(@"****************************************** called ");
-
     [self.appDelegate hideCustomLoader:NULL];
     shown = FALSE;
 
+}
+
+
+- (void)rotate:(NSArray*)arguments withDict:(NSDictionary*)options
+{
+    if ([arguments objectAtIndex:1]) {
+        [self.appDelegate rotateCustomLoader:[[arguments objectAtIndex:1] intValue]];
+    }
 }
 
 @end

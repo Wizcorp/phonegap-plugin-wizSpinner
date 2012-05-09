@@ -1,7 +1,7 @@
 /* WizAssetsPluginExtendsPGdelegate - Extend PhoneGapDelegate so we can reach top views
  *
- * @author WizCorp Inc. [ Incorporated Wizards ] 
- * @copyright 2011
+ * @author Ally Ogilvie
+ * @copyright WizCorp Inc. [ Incorporated Wizards ] 2011
  * @file WizAssetsPluginExtendsPGdelegate.h for PhoneGap
  *
  */ 
@@ -28,6 +28,8 @@
 -(PhoneGapDelegate *) showCustomLoader:(NSDictionary*)splashLoaderView;
 -(PhoneGapDelegate *) removeCustomLoader:(UIView*)splashLoaderView;
 -(PhoneGapDelegate *) updateLoaderLabel:(NSString*)loaderText;
+-(PhoneGapDelegate *) rotateCustomLoader:(int)orientation;
+
 
 -(PhoneGapDelegate *) showPGSplash;
 -(PhoneGapDelegate *) hidePGSplash;
