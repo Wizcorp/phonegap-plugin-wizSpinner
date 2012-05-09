@@ -1,36 +1,36 @@
-/* WizAssetsPluginExtendsPGdelegate - Extend PhoneGapDelegate so we can reach top view
+/* WizAssetsPluginExtendsCDVViewController - Extend CDVViewController so we can reach top view
  *
  * @author Ally Ogilvie
  * @copyright WizCorp Inc. [ Incorporated Wizards ] 2011
- * @file WizAssetsPluginExtendsPGdelegate.m for PhoneGap
+ * @file WizAssetsPluginExtendsCDVViewController.m for PhoneGap
  *
  */ 
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
-#import <PhoneGap/PhoneGapDelegate.h>
+#import <Cordova/CDVViewController.h>
 #import "WizDebugLog.h"
 
 #define degreesToRadians(x) (M_PI * x / 180.0)
 
-@implementation PhoneGapDelegate (extendViews) 
+@implementation CDVViewController (extendViews) 
 
 
 
 
 
 
--(PhoneGapDelegate *) addNewView:(UIView*)progressView
+-(CDVViewController*)addNewView:(UIView*)progressView
 
 {
     
-    [self.window addSubview:progressView];
+    [[UIApplication sharedApplication].keyWindow addSubview:progressView];
     //[self.imageView addSubview:progressView];
     
     return NULL;
 }
 
--(PhoneGapDelegate *) removeView:(UIView*)progressView
+-(CDVViewController*)removeView:(UIView*)progressView
 
 {
     
@@ -40,7 +40,7 @@
 
 
 
--(PhoneGapDelegate *) showPGSplash
+-(CDVViewController*)showPGSplash
 
 {
     
@@ -49,7 +49,7 @@
     return NULL;
 }
 
--(PhoneGapDelegate *) hidePGSplash
+-(CDVViewController*)hidePGSplash
 
 {
     
@@ -67,7 +67,7 @@
 /*
  * hideCustomLoader - Hide loader components
  */
--(PhoneGapDelegate *) hideCustomLoader:(UIView *)progressView
+-(CDVViewController*)hideCustomLoader:(UIView *)progressView
 {
     
     
@@ -76,7 +76,7 @@
     
     
     // hide components
-    for(UIView* spinnerHolder in self.window.subviews) {
+    for(UIView* spinnerHolder in [UIApplication sharedApplication].keyWindow.subviews) {
         if(spinnerHolder.tag==44){
             // hide spinner
             for(UIActivityIndicatorView*spinnerView in spinnerHolder.subviews) {
@@ -111,21 +111,21 @@
 /*
  * removeSplashLoader
  */
--(PhoneGapDelegate *) removeCustomLoader:(UIView *)progressView
+-(CDVViewController*)removeCustomLoader:(UIView *)progressView
 {
     WizLog(@"****************************************** remove spinner");
     // remove view
-    for(UIActivityIndicatorView*spinnerView in self.window.subviews) {
+    for(UIActivityIndicatorView*spinnerView in [UIApplication sharedApplication].keyWindow.subviews) {
         if(spinnerView.tag==45){
             [spinnerView removeFromSuperview];
         }
     }
-    for(UITextView*textView in self.window.subviews) {
+    for(UITextView*textView in self.view.subviews) {
         if(textView.tag==46){
             [textView removeFromSuperview];
         }
     }
-    for(UIView*screen in self.window.subviews) {
+    for(UIView*screen in self.view.subviews) {
         if(screen.tag==47){
             [screen removeFromSuperview];
         }
@@ -136,11 +136,11 @@
 }
 
 
--(PhoneGapDelegate *) rotateCustomLoader:(int)orientation
+-(CDVViewController*)rotateCustomLoader:(int)orientation
 {
     
     
-    for(UIView*spinnerHolder in self.window.subviews) {
+    for(UIView*spinnerHolder in [UIApplication sharedApplication].keyWindow.subviews) {
         if(spinnerHolder.tag==44){
             WizLog(@"rotating view.. %@ : orientation... %i", spinnerHolder , orientation);
             
@@ -150,7 +150,7 @@
                 [spinnerHolder setAutoresizesSubviews:YES];
                 
                 spinnerHolder.transform = CGAffineTransformMakeRotation(0.0);
-                [spinnerHolder setFrame:CGRectMake(self.window.bounds.origin.x, self.window.bounds.origin.y, self.window.bounds.size.width, self.window.bounds.size.height)];
+                [spinnerHolder setFrame:CGRectMake([UIApplication sharedApplication].keyWindow.bounds.origin.x, [UIApplication sharedApplication].keyWindow.bounds.origin.y, [UIApplication sharedApplication].keyWindow.bounds.size.width, [UIApplication sharedApplication].keyWindow.bounds.size.height)];
                 
                 for (UITextView*textView in spinnerHolder.subviews) {
                     if (textView.tag == 46) {
@@ -163,7 +163,7 @@
                 
                 [spinnerHolder setAutoresizesSubviews:YES];
                 spinnerHolder.transform = CGAffineTransformMakeRotation(degreesToRadians(180)); // 180 degrees
-                [spinnerHolder setFrame:CGRectMake(self.window.bounds.origin.x, self.window.bounds.origin.y, self.window.bounds.size.width, self.window.bounds.size.height)];
+                [spinnerHolder setFrame:CGRectMake([UIApplication sharedApplication].keyWindow.bounds.origin.x, [UIApplication sharedApplication].keyWindow.bounds.origin.y, [UIApplication sharedApplication].keyWindow.bounds.size.width, [UIApplication sharedApplication].keyWindow.bounds.size.height)];
 
                 for (UITextView*textView in spinnerHolder.subviews) {
                     if (textView.tag == 46) {
@@ -176,7 +176,7 @@
                 
                 [spinnerHolder setAutoresizesSubviews:YES];
                 spinnerHolder.transform = CGAffineTransformMakeRotation(degreesToRadians(90)); // 90 degress
-                [spinnerHolder setFrame:CGRectMake(self.window.bounds.origin.x, self.window.bounds.origin.y, self.window.bounds.size.width, self.window.bounds.size.height)];
+                [spinnerHolder setFrame:CGRectMake([UIApplication sharedApplication].keyWindow.bounds.origin.x, [UIApplication sharedApplication].keyWindow.bounds.origin.y, [UIApplication sharedApplication].keyWindow.bounds.size.width, [UIApplication sharedApplication].keyWindow.bounds.size.height)];
 
                 for (UITextView*textView in spinnerHolder.subviews) {
                     if (textView.tag == 46) {                        
@@ -189,7 +189,7 @@
                 
                 [spinnerHolder setAutoresizesSubviews:YES];
                 spinnerHolder.transform = CGAffineTransformMakeRotation(degreesToRadians(-90)); // 270 degrees
-                [spinnerHolder setFrame:CGRectMake(self.window.bounds.origin.x, self.window.bounds.origin.y, self.window.bounds.size.width, self.window.bounds.size.height)];
+                [spinnerHolder setFrame:CGRectMake([UIApplication sharedApplication].keyWindow.bounds.origin.x, [UIApplication sharedApplication].keyWindow.bounds.origin.y, [UIApplication sharedApplication].keyWindow.bounds.size.width, [UIApplication sharedApplication].keyWindow.bounds.size.height)];
 
                 for (UITextView*textView in spinnerHolder.subviews) {
                     if (textView.tag == 46) {
@@ -208,7 +208,7 @@
 }
 
 
--(PhoneGapDelegate *) showCustomLoader:(NSDictionary *)options
+-(CDVViewController*)showCustomLoader:(NSDictionary *)options
 {
     
     WizLog(@"****************************************** [showCustomLoader]");
@@ -259,7 +259,7 @@
 
         
         // show components
-        for(UIView* spinnerHolder in self.window.subviews) {
+        for(UIView* spinnerHolder in [UIApplication sharedApplication].keyWindow.subviews) {
             if(spinnerHolder.tag==44){
                 
                 CGRect screenRect = [spinnerHolder bounds];
@@ -344,7 +344,7 @@
         
         
         // show components
-        for(UIView* spinnerHolder in self.window.subviews) {
+        for(UIView* spinnerHolder in [UIApplication sharedApplication].keyWindow.subviews) {
             if(spinnerHolder.tag==44){
                 // show spinner
                 for(UIActivityIndicatorView*spinnerView in spinnerHolder.subviews) {
@@ -387,7 +387,7 @@
     }
 
     
-    for(UIView*spinnerHolder in self.window.subviews) {
+    for(UIView*spinnerHolder in [UIApplication sharedApplication].keyWindow.subviews) {
         if(spinnerHolder.tag==44){
             [spinnerHolder setHidden:FALSE];
         }
@@ -400,9 +400,9 @@
 /*
  * createSplashLoader - Add loader with spinner using options
  */
--(PhoneGapDelegate *) createCustomLoader:(NSDictionary *)options
+-(CDVViewController*)createCustomLoader:(NSDictionary *)options
 {
-    for(UIView*screen in self.window.subviews) {
+    for(UIView*screen in [UIApplication sharedApplication].keyWindow.subviews) {
         if(screen.tag==44){
             WizLog(@"****************************************** ALREADY CREATED SPLASH LOADER - return.");
             return NULL;
@@ -464,7 +464,7 @@
 
     
     // the holder for everything
-    UIView *spinnerHolder = [[UIView alloc] initWithFrame:self.window.bounds];
+    UIView *spinnerHolder = [[UIView alloc] initWithFrame:self.view.bounds];
     spinnerHolder.tag = 44;
     spinnerHolder.hidden = TRUE;
     [spinnerHolder setClipsToBounds:TRUE];
@@ -496,7 +496,7 @@
     [activitySpinner startAnimating];
     [activitySpinner setTag:45];
     [activitySpinner setClipsToBounds:TRUE];
-    [activitySpinner setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
+    [activitySpinner setAutoresizingMask:UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin];
     [activitySpinner setContentMode:UIViewContentModeScaleToFill];
     
         
@@ -555,8 +555,7 @@
     [activitySpinner setAlpha:0.0];
     [loaderStatus setHidden:TRUE];
     
-    
-    [self.window addSubview:spinnerHolder];
+    [[UIApplication sharedApplication].keyWindow addSubview:spinnerHolder];
     
     
     // add views to screen
@@ -573,9 +572,9 @@
     
 }
 
--(PhoneGapDelegate *) updateLoaderLabel:(NSString *)loaderText
+-(CDVViewController*)updateLoaderLabel:(NSString *)loaderText
 {
-    for (UIView*spinnerHolder in self.window.subviews) {
+    for (UIView*spinnerHolder in [UIApplication sharedApplication].keyWindow.subviews) {
         if(spinnerHolder.tag==44){
             for(UITextView*loaderLabel in spinnerHolder.subviews) {
                 if(loaderLabel.tag==46){

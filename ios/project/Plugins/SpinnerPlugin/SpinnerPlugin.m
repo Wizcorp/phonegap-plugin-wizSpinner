@@ -7,13 +7,13 @@
  */ 
 
 #import "SpinnerPlugin.h"
-#import "WizAssetsPluginExtendPGdelegate.h"
+#import "WizAssetsPluginExtendCDVViewController.h"
 #import "WizDebugLog.h"
 
 
 @implementation SpinnerPlugin
 
--(PGPlugin*) initWithWebView:(UIWebView*)theWebView
+-(CDVPlugin*) initWithWebView:(UIWebView*)theWebView
 {
     
     self = (SpinnerPlugin*)[super initWithWebView:theWebView];
@@ -73,7 +73,7 @@
     WizLog(@"****************************************** timeout is %i seconds", timeoutInt);
 
     // default loader
-    [self.appDelegate showCustomLoader:options];
+    [self.viewController showCustomLoader:options];
     shown = TRUE;
     
     // start timer
@@ -103,7 +103,7 @@
         return;
     }
     
-    [self.appDelegate hideCustomLoader:NULL];
+    [self.viewController hideCustomLoader:NULL];
     shown = FALSE;
 
 }
@@ -112,7 +112,7 @@
 - (void)rotate:(NSArray*)arguments withDict:(NSDictionary*)options
 {
     if ([arguments objectAtIndex:1]) {
-        [self.appDelegate rotateCustomLoader:[[arguments objectAtIndex:1] intValue]];
+        [self.viewController rotateCustomLoader:[[arguments objectAtIndex:1] intValue]];
     }
 }
 
