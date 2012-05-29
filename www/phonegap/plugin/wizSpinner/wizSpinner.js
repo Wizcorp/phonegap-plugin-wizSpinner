@@ -2,7 +2,7 @@
 *
 * @author Ally Ogilvie
 * @copyright WizCorp Inc. [ Incorporated Wizards ] 2012
-* @file JavaScript SpinnerPlugin for Cordova
+* @file JavaScript wizSpinner for Cordova
 *
 */
 
@@ -16,17 +16,17 @@ if (deviceIsReady == true) {
 switch (orientation) {
 case 0:
 // portrait normal
-window.nativeSpinner.rotate(1);
+window.wizSpinner.rotate(1);
 return true;
 break;
 case 90:
 // landscape left
-window.nativeSpinner.rotate(3);
+window.wizSpinner.rotate(3);
 return true;
 break;
 case -90:
 // landscape right
-window.nativeSpinner.rotate(4);
+window.wizSpinner.rotate(4);
 return true;
 break;
 case 180:
@@ -44,15 +44,15 @@ deviceIsReady = true;
 }
 */
 
-var nativeSpinner = {
+var wizSpinner = {
 
 
     create: function(s,f,a) {
         if(typeof(a) == "undefined") {
-return cordova.exec(s, f, 'SpinnerPlugin', 'create', []);
-} else {
-return cordova.exec(s, f, 'SpinnerPlugin', 'create', [a]);
-}
+			return cordova.exec(s, f, 'wizSpinnerPlugin', 'create', []);
+		} else {
+			return cordova.exec(s, f, 'wizSpinnerPlugin', 'create', [a]);
+		}
         
     },
     
@@ -60,9 +60,9 @@ return cordova.exec(s, f, 'SpinnerPlugin', 'create', [a]);
 
         if(typeof(a) == "undefined") {
             
-            return cordova.exec(s, f, 'SpinnerPlugin', 'show', []);
-} else {
-            return cordova.exec(s, f, 'SpinnerPlugin', 'show', [a]);
+            return cordova.exec(s, f, 'wizSpinnerPlugin', 'show', []);
+		} else {
+            return cordova.exec(s, f, 'wizSpinnerPlugin', 'show', [a]);
         }
         
 
@@ -70,12 +70,12 @@ return cordova.exec(s, f, 'SpinnerPlugin', 'create', [a]);
     
     hide: function(s,f) {
 
-        return cordova.exec(null, null, 'SpinnerPlugin', 'hide', []);
+        return cordova.exec(null, null, 'wizSpinnerPlugin', 'hide', []);
         
     },
     
     rotate: function(orientation) {
-        cordova.exec(null, null, 'SpinnerPlugin', 'rotate', [orientation]);
+        cordova.exec(null, null, 'wizSpinnerPlugin', 'rotate', [orientation]);
     }
 
 

@@ -1,22 +1,22 @@
-/* SpinnerPlugin - IOS side of the bridge to nativeSpinner JavaScript for PhoneGap
+/* wizSpinnerPlugin - IOS side of the bridge to wizSpinner JavaScript for PhoneGap
  *
  * @author Ally Ogilvie
- * @copyright WizCorp Inc. [ Incorporated Wizards ] 2011
- * @file SpinnerPlugin.m for PhoneGap
+ * @copyright Wizcorp Inc. [ Incorporated Wizards ] 2011
+ * @file wizSpinnerPlugin.m for PhoneGap
  *
  */ 
 
-#import "SpinnerPlugin.h"
+#import "wizSpinnerPlugin.h"
 #import "WizAssetsPluginExtendCDVViewController.h"
 #import "WizDebugLog.h"
 
 
-@implementation SpinnerPlugin
+@implementation wizSpinnerPlugin
 
 -(CDVPlugin*) initWithWebView:(UIWebView*)theWebView
 {
     
-    self = (SpinnerPlugin*)[super initWithWebView:theWebView];
+    self = (wizSpinnerPlugin*)[super initWithWebView:theWebView];
     
     // Path to the plist (in the application bundle)
     NSString *path = [[NSBundle mainBundle] pathForResource:
