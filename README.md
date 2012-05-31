@@ -1,4 +1,3 @@
-
 # PLUGIN: 
 
 phonegap-plugin-wizSpinner<br />
@@ -59,10 +58,3 @@ This is handled by PhoneGap event listener, though you can force this if you wis
 <pre><code>
 wizSpinner.rotate(Int orientation);
 </code></pre>
-
-
-
-# DOCS & SUPPORT :
-
-PhoneGap v1.7
-Docs coming soon...
