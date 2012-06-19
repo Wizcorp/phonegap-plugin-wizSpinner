@@ -47,28 +47,19 @@ deviceIsReady = true;
 var wizSpinner = {
 
 
-    create: function(s,f,a) {
-        if(typeof(a) == "undefined") {
-			return cordova.exec(s, f, 'wizSpinnerPlugin', 'create', []);
-		} else {
-			return cordova.exec(s, f, 'wizSpinnerPlugin', 'create', [a]);
-		}
-        
-    },
-    
-    show: function(s,f,a) {
+    show: function(options) {
 
-        if(typeof(a) == "undefined") {
+        if(typeof(options) == "undefined") {
             
-            return cordova.exec(s, f, 'wizSpinnerPlugin', 'show', []);
+            return cordova.exec(null, null, 'wizSpinnerPlugin', 'show', []);
 		} else {
-            return cordova.exec(s, f, 'wizSpinnerPlugin', 'show', [a]);
+            return cordova.exec(null, null, 'wizSpinnerPlugin', 'show', [options]);
         }
         
 
     },
     
-    hide: function(s,f) {
+    hide: function() {
 
         return cordova.exec(null, null, 'wizSpinnerPlugin', 'hide', []);
         
