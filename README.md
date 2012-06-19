@@ -2,7 +2,7 @@
 
 phonegap-plugin-wizSpinner<br />
 phonegap version : 1.7<br />
-last update : 31/05/2012<br />
+last update : 19/06/2012<br />
 
 <br />
 ![MLB](https://github.com/Wizcorp/phonegap-plugin-wizSpinner/raw/v1.7/screen.jpg)
