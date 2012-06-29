@@ -43,3 +43,40 @@ This is handled by PhoneGap event listener, though you can force this if you wis
 <pre><code>
 wizSpinner.rotate(Int orientation);
 </code></pre>
+<br />
+<br />
+Add this code to manually configure orientations
+<pre><code>
+function shouldRotateToOrientation (orientation)
+{
+    if (deviceIsReady == true) {
+    switch (orientation) {
+        case 0:
+            // portrait normal
+            window.wizSpinner.rotate(1);
+            return true;
+            break;
+        case 90:
+            // landscape left
+            window.wizSpinner.rotate(3);
+            return true;
+            break;
+        case -90:
+        // landscape right
+            window.wizSpinner.rotate(4);
+            return true;
+            break;
+        case 180:
+        // portrait upside down
+            return false;
+            break;
+    }
+    }
+}
+
+
+function onDeviceReady()
+{
+    deviceIsReady = true;
+}
+</code></pre>
