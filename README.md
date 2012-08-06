@@ -2,8 +2,7 @@
 
 phonegap-plugin-wizSpinner<br />
 phonegap version : 1.7<br />
-last update : 19/06/2012<br />
-
+last update : 06/08/2012<br />
 <br />
 ![MLB](https://github.com/Wizcorp/phonegap-plugin-wizSpinner/raw/v1.7/screen.jpg)
 <br />
@@ -14,21 +13,56 @@ PhoneGap plugin for creating and manipulating native loader/spinner above Cordov
 NOTE - Android is portrait only
 <br />
 <br />
+Options<br />
+<pre><code>
+    position	:	"low" / "middle" / "high" - default "middle"
+	position of spinner.
+            
+    label	:	"my loading text" - default "loading..."
+	text to show an empty string will not show any text.
+
+    color	:	"#RGB" / "#ARGB" / "#RRGGBB" / "#AARRGGBB" / "transparent" - default #fff 
+	hex colour string with the wrong spelling of colour.
+
+    bgColor	:	"#RGB" / "#ARGB" / "#RRGGBB" / "#AARRGGBB" / "transparent" - default #fff  
+	hex colour string with the wrong spelling of colour.
+
+   	opacity	:	0.0 - default 0.4 
+	float int between 0.0 and 1.0 for background black canvas
+
+    spinnerColor	:	"white" / "grey" - default "white"
+	Colour of Apple spinner if using Apple spinner
+
+	showSpinner		: true / false - default true
+	shows an Apple spinner
+
+	customSpinner : true / false - default false
+	Override Apple Spinner with a gif (use customSpinnerPath to provide custom path if not default in bundle is used)
+	Required -> showSpinner = true
+
+    customSpinnerPath	:	"http://google.gif" / "var/applications/local/file.gif" / "default" - default "default" (default spinner stored in bundle)
+	customer spinner must be gif (currently). Can be loaded from URL. NOT cached.
+	Required -> customerSpinner = true
+
+   	width	:	100 - default is natural custom image size
+	int in pixels of spinner width if rescaling a custom spinner
+
+    height	:	150 - default is natural custom image size
+	int in pixels of spinner height if rescaling a custom spinner
+</code></pre>
+<br />
 # EXAMPLE CODE : #
+<br />
+<br />
+Create spinner<br />
+<pre><code>
+wizSpinner.create(JSONObject options);
+</pre></code>
 <br />
 <br />
 Show spinner<br />
 <pre><code>
 wizSpinner.show(JSONObject options);
-Example option object;
-{
-"showSpinner": TRUE, [TRUE/FALSE - default : TRUE]
-"position": "low", ["low", "middle" - default : "low"]
-"spinnerColour": "white", ["white", "grey" - default : "white"]
-"opacity": "0.0", [0.0/1.0 - default : 0.0]
-"labelText": "Loading...", [default : "Loading..."]
-"textColour": "white" ["white", "black" - default : "white"]
-};
 </code></pre>
 <br />
 <br />
