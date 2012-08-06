@@ -46,33 +46,34 @@
 
 var wizSpinner = {
     
-create: function(options, s, f) {
+	create: function(options, s, f) {
+	    
+	    return cordova.exec(s, f, 'wizSpinnerPlugin', 'create', [options]);
+	    
+	},
+
     
-    return cordova.exec(s, f, 'wizSpinnerPlugin', 'create', [options]);
-    
-},
-    
-show: function(options) {
-    
-    if(typeof(options) == "undefined") {
-        
-        return cordova.exec(null, null, 'wizSpinnerPlugin', 'show', []);
-    } else {
-        return cordova.exec(null, null, 'wizSpinnerPlugin', 'show', [options]);
-    }
-    
-    
-},
-    
-hide: function() {
-    
-    return cordova.exec(null, null, 'wizSpinnerPlugin', 'hide', []);
-    
-},
-    
-rotate: function(orientation) {
-    cordova.exec(null, null, 'wizSpinnerPlugin', 'rotate', [orientation]);
-}
+	show: function(options) {
+	    
+	    if(typeof(options) == "undefined") {
+	        
+	        return cordova.exec(null, null, 'wizSpinnerPlugin', 'show', []);
+	    } else {
+	        return cordova.exec(null, null, 'wizSpinnerPlugin', 'show', [options]);
+	    }
+	    
+	    
+	},
+	    
+	hide: function() {
+	    
+	    return cordova.exec(null, null, 'wizSpinnerPlugin', 'hide', []);
+	    
+	},
+	    
+	rotate: function(orientation) {
+	    cordova.exec(null, null, 'wizSpinnerPlugin', 'rotate', [orientation]);
+	}
     
     
 };
