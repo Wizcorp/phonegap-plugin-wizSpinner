@@ -15,14 +15,6 @@
 @interface CDVViewController (extendViews)
 
 
--(CDVViewController*)addWizConsole:(UITextView*)consoleView;
--(CDVViewController*)updateWizConsole:(NSString*)myText;
--(CDVViewController*)showWizConsole:(NSString*)myText;
--(CDVViewController*)hideWizConsole:(NSString*)myText;
-
-
-
-
 -(CDVViewController*)createCustomLoader:(NSDictionary*)splashLoaderView;
 -(CDVViewController*)hideCustomLoader:(UIView*)splashLoaderView;
 -(CDVViewController*)showCustomLoader:(NSDictionary*)splashLoaderView;

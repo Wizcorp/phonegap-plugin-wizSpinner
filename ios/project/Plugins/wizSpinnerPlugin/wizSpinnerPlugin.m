@@ -46,8 +46,15 @@
     // This allows the spinner to be ready for action immediately.
     // use show() and hide() - with options or a default
     
+    NSString *callbackId = [arguments objectAtIndex:0];
     
-    WizLog(@"WARNING  - - - - - nativeSpinner.create() is depreciated. Create is called from native by default.");
+    // NSLog(@"WARNING  - - - - - nativeSpinner.create() is depreciated. Create is called from native by default.");
+    
+    [self.viewController createCustomLoader:options];
+    
+    CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
+    [pluginResult setKeepCallbackAsBool:YES];
+    [self writeJavascript: [pluginResult toSuccessCallbackString:callbackId]];
     
 }
 

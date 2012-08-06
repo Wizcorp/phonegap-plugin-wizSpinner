@@ -6,18 +6,13 @@
  *
  */ 
 
-#import <Foundation/Foundation.h>
-#import <UIKit/UIKit.h>
-#import <Cordova/CDVViewController.h>
+#import "WizAssetsPluginExtendCDVViewController.h"
+#import "WizActivitySpinnerView.h"
 #import "WizDebugLog.h"
 
 #define degreesToRadians(x) (M_PI * x / 180.0)
 
 @implementation CDVViewController (extendViews) 
-
-
-
-
 
 
 -(CDVViewController*)addNewView:(UIView*)progressView
@@ -70,40 +65,30 @@
 -(CDVViewController*)hideCustomLoader:(UIView *)progressView
 {
     
-    
-    
+
     WizLog(@"****************************************** [hideCustomLoader]");
-    
-    
+       
     // hide components
-    for(UIView* spinnerHolder in [UIApplication sharedApplication].keyWindow.subviews) {
-        if(spinnerHolder.tag==44){
-            // hide spinner
-            for(UIActivityIndicatorView*spinnerView in spinnerHolder.subviews) {
-                if(spinnerView.tag==45){
-                    [spinnerView setHidden:TRUE];
-                    [spinnerView setAlpha:0.0];
-                }
-            }
-            for(UITextView*textView in spinnerHolder.subviews) {
-                if(textView.tag==46){
-                    [textView setHidden:TRUE];
-                }
-            }
-            for(UIView*screen in spinnerHolder.subviews) {
-                if(screen.tag==47){
-                    [screen setHidden:TRUE];
-                }
-            }
+    for (UIView* spinnerHolder in [UIApplication sharedApplication].keyWindow.subviews) {
+        if (spinnerHolder.tag==44) {
+            // hide all
+            
+            [[spinnerHolder viewWithTag:45] setHidden:TRUE];
+            [[spinnerHolder viewWithTag:45] setAlpha:0.0];
+
+            [[spinnerHolder viewWithTag:46] setHidden:TRUE];
+            
+            [[spinnerHolder viewWithTag:47] setHidden:TRUE];
+            
+            [[spinnerHolder viewWithTag:48] setHidden:TRUE];
+            [[spinnerHolder viewWithTag:48] setAlpha:0.0];
             
             [spinnerHolder setHidden:TRUE];
         }
         
         
     }
-    
 
-    
     return NULL;
 }
 
@@ -211,54 +196,124 @@
 -(CDVViewController*)showCustomLoader:(NSDictionary *)options
 {
     
-    WizLog(@"****************************************** [showCustomLoader]");
+    WizLog(@"****************************************** [showCustomLoader] %@", options);
+    BOOL customSpinner     = FALSE;
+    BOOL showSpinner       = TRUE;
+    NSString *customSpinnerPath = @"default";
     
-    if (options) 
-	{
+    if (options) {
         // use custom options
-        bool showSpinner            = [options objectForKey:@"showSpinner"];
-        if (!showSpinner) {
-            // default show it
-            showSpinner = TRUE;
-        } 
+        if ([options objectForKey:@"showSpinner"]) {
+            showSpinner             = [[options objectForKey:@"showSpinner"] boolValue];
+        }
         
-        NSString *pos            = [options objectForKey:@"position"];
+        if ([options objectForKey:@"customSpinner"]) {
+            customSpinner           = [[options objectForKey:@"customSpinner"] boolValue];        
+        }
+        
+        
+        NSString *pos               = [options objectForKey:@"position"];
         if (!pos) {
             // default values
-            pos       = @"middle";
+            pos = @"middle";
         }  
         
-        NSString *spinnerColour                 = [options objectForKey:@"spinnerColour"];
-        if (!spinnerColour) {
+        NSString *spinnerColor      = [options objectForKey:@"spinnerColor"];
+        if (!spinnerColor) {
             // default values
-            spinnerColour       = @"white";
+            spinnerColor = @"white";
         }
 
-        CGFloat opacity                 = [[options objectForKey:@"opacity"] floatValue];
+        CGFloat opacity             = [[options objectForKey:@"opacity"] floatValue];
         if (!opacity) {
             // default values
-            opacity       = 0.0;
+            opacity = 0.0;
         } 
 
-
-        NSString *labelText               = [options objectForKey:@"labelText"];
-        if (!labelText) {
+        
+        NSString *label             = [options objectForKey:@"label"];
+        if ([options objectForKey:@"labelText"]) {
+            // backward compatibility for textLabel
+            label = [options objectForKey:@"labelText"];
+        }
+        if (!label) {
             // default values
-            labelText                       = @"Loading...";
+            label = @"Loading...";
         }
 
-        NSString *textColour                 = [options objectForKey:@"textColour"];
-        if (!textColour) {
+        NSString *color             = [options objectForKey:@"color"];
+        if (!color) {
             // default values
-            textColour       = @"white";
+            color = @"#fff";
         }
         
+        customSpinnerPath           = [options objectForKey:@"customSpinnerPath"];
+        if (!customSpinnerPath) {
+            customSpinnerPath = @"default";
+            
+        }
         
-        
+        CGFloat width = [[options objectForKey:@"width"] floatValue];
+        CGFloat height = [[options objectForKey:@"height"] floatValue];
         
 
         
-        // show components
+        
+        if (![customSpinnerPath isEqualToString:@"default"]) {
+            // do not do anything a default value means a path has not been give so we can assume no need to change
+
+            for(UIView* spinnerHolder in [UIApplication sharedApplication].keyWindow.subviews) {
+                if (spinnerHolder.tag==44) {
+                    [[spinnerHolder viewWithTag:45] setHidden:TRUE];
+                    [[spinnerHolder viewWithTag:45] removeFromSuperview];
+                    
+                    NSURL *spinnerUrl = nil;
+                    // use custom spinner if default is NOT defined
+                    if ([self validateUrl:customSpinnerPath]) {
+                        // is url
+                        spinnerUrl = [[NSURL alloc] initWithString:customSpinnerPath];
+
+                    } else {
+                        // is path
+                        spinnerUrl = [[NSURL alloc] initFileURLWithPath:customSpinnerPath];
+                        
+                    }
+                    
+                    WizActivitySpinnerView *activitySpinner = [[WizActivitySpinnerView alloc] initWithImageURL:spinnerUrl];
+                    [spinnerUrl release];
+                    NSLog(@"NEW spinner path - %@", customSpinnerPath);
+                                        
+                    CGRect screenRect = spinnerHolder.bounds;
+                    CGFloat screenWidth = screenRect.size.width;
+                    CGFloat screenHeight = screenRect.size.height;
+                    
+                    [activitySpinner setCenter:CGPointMake(screenWidth/2, screenHeight/2)];
+                    [activitySpinner setAlpha:1.0];
+                    [activitySpinner setBackgroundColor:[UIColor clearColor]];
+                    [activitySpinner startAnimating];
+                    [activitySpinner setTag:45];
+                    [activitySpinner setClipsToBounds:TRUE];
+                    [activitySpinner setAutoresizingMask:UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin];
+                    [activitySpinner setContentMode:UIViewContentModeScaleToFill];
+                    if ( width > 0 && height > 0 ) {
+                        [activitySpinner setSize:CGSizeMake(width, height)];
+                    }
+                    
+                    [activitySpinner setHidden:TRUE];
+                    [activitySpinner setAlpha:0.0];
+                    [spinnerHolder addSubview:activitySpinner];
+                    
+                    
+                    [activitySpinner release];
+
+                }
+            }
+            
+            
+        }
+
+        
+        // show and set components
         for(UIView* spinnerHolder in [UIApplication sharedApplication].keyWindow.subviews) {
             if(spinnerHolder.tag==44){
                 
@@ -267,116 +322,92 @@
                 CGFloat screenHeight = screenRect.size.height;
                 
                 
-                // set UIActivityIndicatorView
-                for(UIActivityIndicatorView*spinnerView in spinnerHolder.subviews) {
-                    if(spinnerView.tag==45){
-                        if ([spinnerColour isEqualToString:@"white"]) {
-                            [spinnerView setActivityIndicatorViewStyle:UIActivityIndicatorViewStyleWhiteLarge];
-                        } else if ([spinnerColour isEqualToString:@"grey"]) {
-                            [spinnerView setActivityIndicatorViewStyle:UIActivityIndicatorViewStyleGray];
-                        } else {
-                            [spinnerView setActivityIndicatorViewStyle:UIActivityIndicatorViewStyleGray];
-                        }
-
-                        if ([pos isEqualToString:@"low"]) {
-                            
-                            [spinnerView setCenter:CGPointMake(screenWidth/2, screenHeight/1.5)];
-                            
-                        } else if ([pos isEqualToString:@"middle"]) { 
-                            
-                            [spinnerView setCenter:CGPointMake(screenWidth/2, screenHeight/2)];
-                            
-                        } else {
-                            
-                            // default middle
-                            [spinnerView setCenter:CGPointMake(screenWidth/2, screenHeight/2)];
-                            
-                        }
-                        if (showSpinner == 1) {
-                            [spinnerView setHidden:FALSE];
-                            [spinnerView setAlpha:1.0];
-                            WizLog(@"showSpinner default %i", showSpinner);
-                        } else {
-                            [spinnerView setHidden:TRUE];
-                            [spinnerView setAlpha:0.0];
-                            WizLog(@"showSpinner default %i", showSpinner);
-                        }
-                    }
+                // aditional settings for apple spinner
+                UIActivityIndicatorView *appleSpinner = (UIActivityIndicatorView*)[spinnerHolder viewWithTag:48];
+                if ([spinnerColor isEqualToString:@"white"]) {
+                    [appleSpinner setActivityIndicatorViewStyle:UIActivityIndicatorViewStyleWhiteLarge];
+                } else if ([spinnerColor isEqualToString:@"grey"]) {
+                    [appleSpinner setActivityIndicatorViewStyle:UIActivityIndicatorViewStyleGray];
+                } else {
+                    [appleSpinner setActivityIndicatorViewStyle:UIActivityIndicatorViewStyleGray];
                 }
-                // set UITextView
-                for(UITextView*textView in spinnerHolder.subviews) {
-                    if(textView.tag==46){
-                        
-                        
-                        [textView setText:labelText];
-                        [textView setHidden:FALSE];
-                                                
-                        // move the centre point down so under the spinner (default is portrait)
-                        [textView setCenter:CGPointMake(spinnerHolder.bounds.size.width/2, spinnerHolder.bounds.size.height/0.95)];
-        
-                        
-                        // TODO add more colours?
-                        if ([textColour isEqualToString:@"white"]) {
-                            [textView setTextColor:[UIColor whiteColor]];
-                        } else if ([textColour isEqualToString:@"black"]) {
-                            [textView setTextColor:[UIColor blackColor]];
-                        } else {
-                            [textView setTextColor:[UIColor blackColor]];
-                        }
-                        
-                    }
+                if ([pos isEqualToString:@"low"]) {
+                    [appleSpinner setCenter:CGPointMake(screenWidth/2, screenHeight/1.5)];
+                } else if ([pos isEqualToString:@"middle"]) { 
+                    [appleSpinner setCenter:CGPointMake(screenWidth/2, screenHeight/2)];
+                } else {
+                    // default middle
+                    [appleSpinner setCenter:CGPointMake(screenWidth/2, screenHeight/2)];
                 }
                 
-                // set back screen
-                for(UIView*screen in spinnerHolder.subviews) {
-                    if(screen.tag==47){
-                        [screen setAlpha:opacity];
-                        [screen setHidden:FALSE];
-                    }
+                
+
+                // set text label
+                UITextView *textBox = (UITextView*)[spinnerHolder viewWithTag:46];
+                [textBox setText:label];
+                [textBox setHidden:FALSE];
+                // move the centre point down so under the spinner (default is portrait)
+                [textBox setCenter:CGPointMake(spinnerHolder.bounds.size.width/2, spinnerHolder.bounds.size.height/0.95)];
+                if ([color isEqualToString:@"transparent"]) {
+                    [textBox setTextColor:[UIColor clearColor]];
+                } else {
+                    [textBox setTextColor:[self colorWithHexString:color]];            
                 }
+                
+                
+                // set back screen
+                [[spinnerHolder viewWithTag:47] setAlpha:opacity];
+                [[spinnerHolder viewWithTag:47] setHidden:FALSE];
+                
+                if (showSpinner == 1) {
+                    if (customSpinner == 1) {
+                        // set custom spinner visible
+                        [[spinnerHolder viewWithTag:45] setHidden:FALSE];
+                        [[spinnerHolder viewWithTag:45] setAlpha:1.0];
+                        [[spinnerHolder viewWithTag:48] setHidden:TRUE];
+                        [[spinnerHolder viewWithTag:48] setAlpha:0.0];
+                    } else {
+                        // set Apple Spinner visible
+                        [[spinnerHolder viewWithTag:45] setHidden:TRUE];
+                        [[spinnerHolder viewWithTag:45] setAlpha:0.0];
+                        [[spinnerHolder viewWithTag:48] setHidden:FALSE];
+                        [[spinnerHolder viewWithTag:48] setAlpha:1.0];
+                    }
+                } else {
+                    [[spinnerHolder viewWithTag:48] setHidden:TRUE];
+                    [[spinnerHolder viewWithTag:48] setAlpha:0.0];
+                    [[spinnerHolder viewWithTag:45] setHidden:TRUE];
+                    [[spinnerHolder viewWithTag:45] setAlpha:0.0];
+                }
+                
+                
             }
         }
                 
         
     } else {
         // defaults
-        
-        
+
         
         // show components
-        for(UIView* spinnerHolder in [UIApplication sharedApplication].keyWindow.subviews) {
-            if(spinnerHolder.tag==44){
-                // show spinner
-                for(UIActivityIndicatorView*spinnerView in spinnerHolder.subviews) {
-                    if(spinnerView.tag==45){
-                        [spinnerView setHidden:FALSE];
-                        [spinnerView setAlpha:1.0];
-                        [spinnerView setActivityIndicatorViewStyle:UIActivityIndicatorViewStyleWhiteLarge];
-                        
-                    }
-                }
+        for (UIView* spinnerHolder in [UIApplication sharedApplication].keyWindow.subviews) {
+            if (spinnerHolder.tag == 44){
+                // show apple spinner
+                [[spinnerHolder viewWithTag:48] setHidden:FALSE];
+                [[spinnerHolder viewWithTag:48] setAlpha:1.0];
+                
                 // show text label
-                for(UITextView*textView in spinnerHolder.subviews) {
-                    if(textView.tag==46){
-                        [textView setText:@"Loading..."];
-                        [textView setHidden:FALSE];
-                    }
-                }
+                UITextView *textBox = (UITextView*)[spinnerHolder viewWithTag:46];
+                [textBox setText:@"Loading..."];
+                [textBox setHidden:FALSE];
+                
                 // show black screen
-                for(UIView*screen in spinnerHolder.subviews) {
-                    if(screen.tag==47){
-                        CGFloat opacity = 0.4;
-                        [screen setAlpha:opacity];
-                        [screen setHidden:FALSE];
-                    }
-                }
+                // CGFloat opacity = 0.4;
+                // [[spinnerHolder viewWithTag:47] setAlpha:opacity];
+                [[spinnerHolder viewWithTag:47] setHidden:FALSE];
             }
         }
 
-
-
-        
-        
     } 
     
     
@@ -387,8 +418,8 @@
     }
 
     
-    for(UIView*spinnerHolder in [UIApplication sharedApplication].keyWindow.subviews) {
-        if(spinnerHolder.tag==44){
+    for (UIView*spinnerHolder in [UIApplication sharedApplication].keyWindow.subviews) {
+        if (spinnerHolder.tag == 44) {
             [spinnerHolder setHidden:FALSE];
         }
     }
@@ -414,18 +445,22 @@
     
     // defaults
     NSString *pos           = @"middle";              
-    NSString *labelText     = @"Loading..."; 
-    NSString *textColour    = @"white"; 
-    CGFloat opacity         = 0.0 ;            
-    NSString *spinnerColour = @"white";
-
-    if (options) 
-	{
+    NSString *label         = @"Loading..."; 
+    NSString *color         = @"#fff"; 
+    NSString *bgColor       = @"#000";
+    CGFloat opacity         = 0.0;
+    NSString *spinnerColor  = @"white";
+    CGFloat width           = 0.0;
+    CGFloat height          = 0.0;
+    NSString *customSpinnerPath = @"default";
+    
+    if (options) {      
+        
         // get loader options
-        spinnerColour                 = [options objectForKey:@"spinnerColour"];
-        if (!spinnerColour) {
+        spinnerColor                 = [options objectForKey:@"spinnerColor"];
+        if (!spinnerColor) {
             // default values
-            spinnerColour       = @"white";
+            spinnerColor       = @"white";
         }
         
         pos            = [options objectForKey:@"position"];
@@ -436,10 +471,14 @@
         
         
         
-        labelText               = [options objectForKey:@"labelText"];
-        if (!labelText) {
+        label               = [options objectForKey:@"label"];
+        if ([options objectForKey:@"labelText"]) {
+            // backward compatibility for textLabel
+            label = [options objectForKey:@"labelText"];
+        }
+        if (!label) {
             // default values
-            labelText           = @"Loading...";
+            label           = @"Loading...";
         }
         
         
@@ -450,19 +489,23 @@
         }
         
         
-        textColour              = [options objectForKey:@"textColour"];
-        if (!textColour) {
+        color              = [options objectForKey:@"color"];
+        if (!color) {
             // default values
-            textColour          = @"white";
+            color          = @"#fff";
         }
+        
+        customSpinnerPath       = [options objectForKey:@"customSpinnerPath"];
+        if (!customSpinnerPath) {
+            customSpinnerPath = @"default";
+
+        }
+        
+        width = [[options objectForKey:@"width"] floatValue];
+        height = [[options objectForKey:@"height"] floatValue];
         
     }
 
-    
-    
-    
-
-    
     // the holder for everything
     UIView *spinnerHolder = [[UIView alloc] initWithFrame:self.view.bounds];
     spinnerHolder.tag = 44;
@@ -480,7 +523,12 @@
     
     // the background screen
     UIView *backgroundScreen = [[UIView alloc] initWithFrame:spinnerHolder.bounds];
-    backgroundScreen.backgroundColor = [UIColor blackColor];
+    if ([bgColor isEqualToString:@"transparent"]) {
+        backgroundScreen.backgroundColor = [UIColor clearColor];
+    } else {
+        backgroundScreen.backgroundColor = [self colorWithHexString:bgColor];            
+    }
+    
     backgroundScreen.tag = 47;
     backgroundScreen.alpha = opacity;
     [backgroundScreen setClipsToBounds:TRUE];
@@ -488,9 +536,67 @@
     [backgroundScreen setContentMode:UIViewContentModeScaleToFill];
     
     
-    // create spinner
-    UIActivityIndicatorView *activitySpinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
-    [activitySpinner setCenter:CGPointMake(screenWidth/2, screenHeight/1.5)];
+    // create Apple Spinner
+    UIActivityIndicatorView *appleSpinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+    [appleSpinner setCenter:CGPointMake(screenWidth/2, screenHeight/1.5)];
+    [appleSpinner setAlpha:1.0];
+    [appleSpinner setBackgroundColor:[UIColor clearColor]];
+    [appleSpinner startAnimating];
+    [appleSpinner setTag:48];
+    [appleSpinner setClipsToBounds:TRUE];
+    [appleSpinner setAutoresizingMask:UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin];
+    [appleSpinner setContentMode:UIViewContentModeScaleToFill];
+    if ([pos isEqualToString:@"low"]) {
+        [appleSpinner setCenter:CGPointMake(screenWidth/2, screenHeight/1.5)];
+    } else if ([pos isEqualToString:@"middle"]) { 
+        [appleSpinner setCenter:CGPointMake(screenWidth/2, screenHeight/2)];
+    } else {
+        // default middle
+        [appleSpinner setCenter:CGPointMake(screenWidth/2, screenHeight/2)];
+    }
+    
+    if ([spinnerColor isEqualToString:@"white"]) {
+        [appleSpinner setActivityIndicatorViewStyle:UIActivityIndicatorViewStyleWhiteLarge];
+    } else if ([spinnerColor isEqualToString:@"grey"]) {
+        [appleSpinner setActivityIndicatorViewStyle:UIActivityIndicatorViewStyleGray];
+    } else {
+        [appleSpinner setActivityIndicatorViewStyle:UIActivityIndicatorViewStyleGray];
+    }
+    
+    
+    
+    
+    
+    // create custom spinner
+    // Some URLs for testing local and remote loading of custom animated .gif
+    // (Invalid URL or non-existent file will fail silently and not display any image)
+    // TODO: Add some reasonable error handling and default image
+    // NSURL *url = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"custom" ofType:@"gif" inDirectory:nil]];
+    // NSURL *url = [NSURL URLWithString:@"https://github.com/aogilvie/practical-test-01/raw/master/custom.gif"];
+    // NSURL *url = [NSURL URLWithString:@"http://images.animationfactory.com/thw/thw14/AF/animations/time/clocks/mr_alarm_dragging_feet/4966736.gif?mr_alarm_dragging_feet_lg_wm"];
+    
+    NSLog(@"customSpinnerPath is %@", customSpinnerPath);
+    
+    NSURL *spinnerUrl = nil;
+    
+    if ([customSpinnerPath isEqualToString:@"default"]) {
+        spinnerUrl = [[NSURL alloc] initFileURLWithPath:[[NSBundle mainBundle] pathForResource:@"spinner" ofType:@"gif" inDirectory:nil]];
+    } else {
+        // use custom spinner
+        if ([self validateUrl:customSpinnerPath]) {
+            // is url
+            spinnerUrl = [[NSURL alloc] initWithString:customSpinnerPath];
+        } else {
+            // is path
+            spinnerUrl = [[NSURL alloc] initFileURLWithPath:customSpinnerPath];
+        }        
+    }
+    NSLog(@"spinner path - %@", customSpinnerPath);
+    
+    WizActivitySpinnerView *activitySpinner = [[WizActivitySpinnerView alloc] initWithImageURL:spinnerUrl];
+    [spinnerUrl release];
+    
+    [activitySpinner setCenter:CGPointMake(screenWidth/2, screenHeight/2)];
     [activitySpinner setAlpha:1.0];
     [activitySpinner setBackgroundColor:[UIColor clearColor]];
     [activitySpinner startAnimating];
@@ -498,34 +604,13 @@
     [activitySpinner setClipsToBounds:TRUE];
     [activitySpinner setAutoresizingMask:UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin];
     [activitySpinner setContentMode:UIViewContentModeScaleToFill];
-    
-        
-    if ([pos isEqualToString:@"low"]) {
-        
-        [activitySpinner setCenter:CGPointMake(screenWidth/2, screenHeight/1.5)];
-        
-    } else if ([pos isEqualToString:@"middle"]) { 
-        
-        [activitySpinner setCenter:CGPointMake(screenWidth/2, screenHeight/2)];
-        
-    } else {
-        
-        // default middle
-        [activitySpinner setCenter:CGPointMake(screenWidth/2, screenHeight/2)];
-        
+    if ( width > 0 && height > 0 ) {
+        [activitySpinner setSize:CGSizeMake(width, height)];
     }
-    
-    if ([spinnerColour isEqualToString:@"white"]) {
-        [activitySpinner setActivityIndicatorViewStyle:UIActivityIndicatorViewStyleWhiteLarge];
-    } else if ([spinnerColour isEqualToString:@"grey"]) {
-        [activitySpinner setActivityIndicatorViewStyle:UIActivityIndicatorViewStyleGray];
-    } else {
-        [activitySpinner setActivityIndicatorViewStyle:UIActivityIndicatorViewStyleGray];
-    }
+        
     
     
-    
-    
+
     // create text..
     UITextView *loaderStatus = [[UITextView alloc] initWithFrame:spinnerHolder.bounds];
     [loaderStatus setTag:46];
@@ -534,7 +619,7 @@
     [loaderStatus setBackgroundColor:([UIColor clearColor])];
     [loaderStatus setScrollEnabled:FALSE];
     [loaderStatus setUserInteractionEnabled:FALSE];
-    [loaderStatus setText:labelText];
+    [loaderStatus setText:label];
     [loaderStatus setClipsToBounds:TRUE];
     
     // move the centre point down so under the spinner (default is portrait)
@@ -543,16 +628,19 @@
     [loaderStatus setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];    
     
     
-    // TODO more colours?
-    if ([textColour isEqualToString:@"white"]) {
-        [loaderStatus setTextColor:[UIColor whiteColor]];
-    } else if ([textColour isEqualToString:@"black"]) {
-        [loaderStatus setTextColor:[UIColor blackColor]];
+    if ([color isEqualToString:@"transparent"]) {
+        [loaderStatus setTextColor:[UIColor clearColor]];
+    } else {
+        [loaderStatus setTextColor:[self colorWithHexString:color]];            
     }
     
 
+    [appleSpinner setHidden:TRUE];
+    [appleSpinner setAlpha:0.0];
+    
     [activitySpinner setHidden:TRUE];
     [activitySpinner setAlpha:0.0];
+    
     [loaderStatus setHidden:TRUE];
     
     [[UIApplication sharedApplication].keyWindow addSubview:spinnerHolder];
@@ -562,11 +650,23 @@
     [spinnerHolder addSubview:backgroundScreen];
     [spinnerHolder addSubview:activitySpinner];
     [spinnerHolder addSubview:loaderStatus];
-    [backgroundScreen retain];
-    [activitySpinner retain];
-    [loaderStatus retain];
+    [spinnerHolder addSubview:appleSpinner];
+    
+    
+    // After these release messages are sent, the objects remain allocated
+    // (with a retainCount of 1) for as long as they have a superview.
+    // The previous code sent retain messages which incremented the retainCounts
+    // without ever decrementing retainCounts (via release messages).  Worse, the
+    // original code didn't even hang on to the objects as member variables or
+    // properties -- so it was not even possible to send release messages later.
+    [backgroundScreen release];
+    [activitySpinner release];
+    [loaderStatus release];
+    [appleSpinner release];
 
 
+    // release to spinnerHolder.
+    [spinnerHolder release];
     
     return NULL;
     
@@ -589,8 +689,63 @@
 }
 
 
+- (BOOL) validateUrl: (NSString *) candidate {
+    NSString* lowerCased = [candidate lowercaseString];
+    return [lowerCased hasPrefix:@"http://"] || [lowerCased hasPrefix:@"https://"];
+}
 
 
 
+/**
+ 
+ COLOUR CALCULATOR
+ 
+ 
+ **/
+
+- (UIColor *) colorWithHexString: (NSString *) hexString 
+{
+    NSString *colorString = [[hexString stringByReplacingOccurrencesOfString: @"#" withString: @""] uppercaseString];
+    CGFloat alpha, red, blue, green;
+    switch ([colorString length]) {
+        case 3: // #RGB
+            alpha = 1.0f;
+            red   = [self colorComponentFrom: colorString start: 0 length: 1];
+            green = [self colorComponentFrom: colorString start: 1 length: 1];
+            blue  = [self colorComponentFrom: colorString start: 2 length: 1];
+            break;
+        case 4: // #ARGB
+            alpha = [self colorComponentFrom: colorString start: 0 length: 1];
+            red   = [self colorComponentFrom: colorString start: 1 length: 1];
+            green = [self colorComponentFrom: colorString start: 2 length: 1];
+            blue  = [self colorComponentFrom: colorString start: 3 length: 1];          
+            break;
+        case 6: // #RRGGBB
+            alpha = 1.0f;
+            red   = [self colorComponentFrom: colorString start: 0 length: 2];
+            green = [self colorComponentFrom: colorString start: 2 length: 2];
+            blue  = [self colorComponentFrom: colorString start: 4 length: 2];                      
+            break;
+        case 8: // #AARRGGBB
+            alpha = [self colorComponentFrom: colorString start: 0 length: 2];
+            red   = [self colorComponentFrom: colorString start: 2 length: 2];
+            green = [self colorComponentFrom: colorString start: 4 length: 2];
+            blue  = [self colorComponentFrom: colorString start: 6 length: 2];                      
+            break;
+        default:
+            [NSException raise:@"Invalid color value" format: @"Color value %@ is invalid.  It should be a hex value of the form #RGB, #ARGB, #RRGGBB, or #AARRGGBB", hexString];
+            break;
+    }
+    return [UIColor colorWithRed: red green: green blue: blue alpha: alpha];
+}
+
+- (CGFloat) colorComponentFrom: (NSString *) string start: (NSUInteger) start length: (NSUInteger) length 
+{
+    NSString *substring = [string substringWithRange: NSMakeRange(start, length)];
+    NSString *fullHex = length == 2 ? substring : [NSString stringWithFormat: @"%@%@", substring, substring];
+    unsigned hexComponent;
+    [[NSScanner scannerWithString: fullHex] scanHexInt: &hexComponent];
+    return hexComponent / 255.0;
+}
 
 @end
