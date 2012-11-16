@@ -12,6 +12,12 @@ PhoneGap plugin for creating and manipulating native loader/spinner above Cordov
 <br />
 NOTE - Android is portrait only
 <br />
+
+# USAGE :
+
+- For iOS, add the following frameworks:
+	- ImageIO.framework
+
 <br />
 Options<br />
 <pre><code>
