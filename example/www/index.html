@@ -39,8 +39,7 @@
 
 	// If you want to prevent dragging, uncomment this section
 	/*
-	function preventBehavior(e) 
-	{ 
+	function preventBehavior(e) {
       e.preventDefault(); 
     };
 	document.addEventListener("touchmove", preventBehavior, false);
@@ -50,14 +49,12 @@
 	see http://iphonedevelopertips.com/cocoa/launching-your-own-application-via-a-custom-url-scheme.html
 	for more details -jm */
 	/*
-	function handleOpenURL(url)
-	{
+	function handleOpenURL(url) {
 		// TODO: do something with the url passed in.
 	}
 	*/
 	
-	function onBodyLoad()
-	{		
+	function onBodyLoad() {
 		document.addEventListener("deviceready", onDeviceReady, false);
 	}
 	
@@ -65,8 +62,7 @@
 	/* If you are supporting your own protocol, the var invokeString will contain any arguments to the app launch.
 	see http://iphonedevelopertips.com/cocoa/launching-your-own-application-via-a-custom-url-scheme.html
 	for more details -jm */
-	function onDeviceReady()
-	{
+	function onDeviceReady() {
         if (!window.wizSpinner) {
             alert("Could not find wizSpinner");
         }
@@ -78,16 +74,15 @@
     
     function showHideSpinner() {
         alert("The Spinner will show for 5 seconds and then will be hidden.");
-        var options = { };
         window.wizSpinner.show();
         setTimeout(function() { doThisIn5Secs() }, 5000);
     }
     
     function showCustomSpinner() {
         var options = {
-            "customSpinner" : true,
-            "position" : "low",
-            "label" : "Your label here :)"
+            customSpinner : true,
+            position : "low",
+            label : "Your label here :)"
         };
         alert("The Spinner will show for 5 seconds and then will be hidden.");
         window.wizSpinner.show( options );
