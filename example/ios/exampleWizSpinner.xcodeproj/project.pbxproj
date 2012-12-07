@@ -22,7 +22,6 @@
 		F606129D165228C700B49154 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F606129C165228C700B49154 /* CoreMedia.framework */; };
 		F60612A3165228C800B49154 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = F60612A1165228C800B49154 /* InfoPlist.strings */; };
 		F60612A5165228C800B49154 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = F60612A4165228C800B49154 /* main.m */; };
-		F60612A8165228C800B49154 /* Cordova.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F60612A7165228C800B49154 /* Cordova.framework */; };
 		F60612AD165228C800B49154 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = F60612AB165228C800B49154 /* Localizable.strings */; };
 		F60612B1165228C800B49154 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = F60612AF165228C800B49154 /* Localizable.strings */; };
 		F60612B5165228C800B49154 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = F60612B3165228C800B49154 /* Localizable.strings */; };
@@ -44,6 +43,7 @@
 		F699053E16522C4A009EFCFB /* WizAssetsPluginExtendCDVViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F699053916522C4A009EFCFB /* WizAssetsPluginExtendCDVViewController.m */; };
 		F699053F16522C4A009EFCFB /* WizSpinnerPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = F699053C16522C4A009EFCFB /* WizSpinnerPlugin.m */; };
 		F6990549165333B0009EFCFB /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F6990548165333B0009EFCFB /* ImageIO.framework */; };
+		F6D13D3E1671D42600EE7F6F /* Cordova.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F6D13D3D1671D42600EE7F6F /* Cordova.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -65,7 +65,6 @@
 		F60612A2165228C800B49154 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		F60612A4165228C800B49154 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		F60612A6165228C800B49154 /* exampleWizSpinner-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "exampleWizSpinner-Prefix.pch"; sourceTree = "<group>"; };
-		F60612A7165228C800B49154 /* Cordova.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cordova.framework; path = /Users/Shared/Cordova/Frameworks/Cordova.framework; sourceTree = "<absolute>"; };
 		F60612AC165228C800B49154 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = Resources/en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		F60612B0165228C800B49154 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = Resources/es.lproj/Localizable.strings; sourceTree = "<group>"; };
 		F60612B4165228C800B49154 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = Resources/de.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -96,6 +95,7 @@
 		F699053B16522C4A009EFCFB /* WizSpinnerPlugin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WizSpinnerPlugin.h; sourceTree = "<group>"; };
 		F699053C16522C4A009EFCFB /* WizSpinnerPlugin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WizSpinnerPlugin.m; sourceTree = "<group>"; };
 		F6990548165333B0009EFCFB /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
+		F6D13D3D1671D42600EE7F6F /* Cordova.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cordova.framework; path = Frameworks/Cordova.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -103,6 +103,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F6D13D3E1671D42600EE7F6F /* Cordova.framework in Frameworks */,
 				F6990549165333B0009EFCFB /* ImageIO.framework in Frameworks */,
 				F6061285165228C700B49154 /* Foundation.framework in Frameworks */,
 				F6061287165228C700B49154 /* UIKit.framework in Frameworks */,
@@ -117,7 +118,6 @@
 				F6061299165228C700B49154 /* SystemConfiguration.framework in Frameworks */,
 				F606129B165228C700B49154 /* MobileCoreServices.framework in Frameworks */,
 				F606129D165228C700B49154 /* CoreMedia.framework in Frameworks */,
-				F60612A8165228C800B49154 /* Cordova.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -152,6 +152,7 @@
 		F6061283165228C700B49154 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				F6D13D3D1671D42600EE7F6F /* Cordova.framework */,
 				F6990548165333B0009EFCFB /* ImageIO.framework */,
 				F6061284165228C700B49154 /* Foundation.framework */,
 				F6061286165228C700B49154 /* UIKit.framework */,
@@ -173,7 +174,6 @@
 		F606129E165228C700B49154 /* exampleWizSpinner */ = {
 			isa = PBXGroup;
 			children = (
-				F60612A7165228C800B49154 /* Cordova.framework */,
 				F60612A9165228C800B49154 /* Resources */,
 				F60612CA165228C800B49154 /* Classes */,
 				F60612D3165228C800B49154 /* Plugins */,
@@ -536,7 +536,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
 				COPY_PHASE_STRIP = NO;
-				FRAMEWORK_SEARCH_PATHS = /Users/Shared/Cordova/Frameworks;
+				FRAMEWORK_SEARCH_PATHS = "\"$(SRCROOT)/Frameworks\"";
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "exampleWizSpinner/exampleWizSpinner-Prefix.pch";
@@ -566,7 +566,7 @@
 				ALWAYS_SEARCH_USER_PATHS = YES;
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				FRAMEWORK_SEARCH_PATHS = /Users/Shared/Cordova/Frameworks;
+				FRAMEWORK_SEARCH_PATHS = "\"$(SRCROOT)/Frameworks\"";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "exampleWizSpinner/exampleWizSpinner-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
