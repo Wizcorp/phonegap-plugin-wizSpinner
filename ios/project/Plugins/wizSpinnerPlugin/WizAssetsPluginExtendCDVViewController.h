@@ -23,7 +23,4 @@
 -(CDVViewController*)rotateCustomLoader:(int)orientation;
 
 
--(CDVViewController*)showPGSplash;
--(CDVViewController*)hidePGSplash;
-
 @end

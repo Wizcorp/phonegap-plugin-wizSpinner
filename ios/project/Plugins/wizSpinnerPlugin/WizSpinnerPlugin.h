@@ -1,8 +1,8 @@
-/* SpinnerPlugin - IOS side of the bridge to wizSpinner JavaScript for PhoneGap
+/* SpinnerPlugin - IOS side of the bridge to WizSpinner JavaScript for PhoneGap
  *
  * @author Ally Ogilvie
  * @copyright Wizcorp Inc. [ Incorporated Wizards ] 2011
- * @file wizSpinnerPlugin.h for Cordova
+ * @file WizSpinnerPlugin.h for Cordova
  *
  */
 
@@ -13,7 +13,7 @@
 #import "CDVPlugin.h"
 #endif
 
-@interface wizSpinnerPlugin : CDVPlugin {
+@interface WizSpinnerPlugin : CDVPlugin {
 
     NSTimer *timeout;
     bool shown;
