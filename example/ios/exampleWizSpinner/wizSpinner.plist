@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>autoShowSpinnerOnStart</key>
+	<false/>
+	<key>defaults</key>
+	<dict>
+		<key>customSpinner</key>
+		<false/>
+		<key>spinnerColor</key>
+		<string>white</string>
+		<key>label</key>
+		<string>My Label :)</string>
+		<key>opacity</key>
+		<real>0</real>
+	</dict>
+</dict>
+</plist>
