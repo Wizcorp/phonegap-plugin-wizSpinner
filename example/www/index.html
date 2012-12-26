@@ -73,8 +73,16 @@
     }
     
     function showHideSpinner() {
+        var options = {
+            customSpinner : false,
+            position : "middle",
+            label : "A new label :)",
+            bgColor: "#000",
+            opacity:0.5,
+            color: "#000"
+        };
         alert("The Spinner will show for 5 seconds and then will be hidden.");
-        window.wizSpinner.show();
+        window.wizSpinner.show(options);
         setTimeout(function() { doThisIn5Secs() }, 5000);
     }
     
@@ -82,7 +90,10 @@
         var options = {
             customSpinner : true,
             position : "low",
-            label : "Your label here :)"
+            label : "Your label here :)",
+            bgColor: "#000",
+            opacity:0.5,
+            color: "#000"
         };
         alert("The Spinner will show for 5 seconds and then will be hidden.");
         window.wizSpinner.show( options );
@@ -91,7 +102,7 @@
         
     </script>
   </head>
-  <body bgcolor="green" onload="onBodyLoad()">
+  <body onload="onBodyLoad()">
       <h1>WizSpinner plugin!</h1>
       <input type="button" id="show_button" value="Show/Hide Spinner" onclick="showHideSpinner()" />
       <input type="button" id="rotate_button" value="Show/Hide Custom Spinner" onclick="showCustomSpinner()" />
