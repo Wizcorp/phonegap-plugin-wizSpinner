@@ -485,7 +485,8 @@
     }
 
     // the holder for everything
-    UIView *spinnerHolder = [[UIView alloc] initWithFrame:self.view.bounds];
+    // Note: The spinner holder will cover the whole winow so initialize using the application's window frame
+    UIView *spinnerHolder = [[UIView alloc] initWithFrame:[UIApplication sharedApplication].keyWindow.frame];
     spinnerHolder.tag = 44;
     spinnerHolder.hidden = TRUE;
     [spinnerHolder setClipsToBounds:TRUE];
@@ -500,7 +501,7 @@
     
     
     // the background screen
-    UIView *backgroundScreen = [[UIView alloc] initWithFrame:spinnerHolder.bounds];
+    UIView *backgroundScreen = [[UIView alloc] initWithFrame:spinnerHolder.frame];
     if ([bgColor isEqualToString:@"transparent"]) {
         backgroundScreen.backgroundColor = [UIColor clearColor];
     } else {
