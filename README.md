@@ -1,8 +1,8 @@
 # PLUGIN: 
 
 phonegap-plugin-wizSpinner<br />
-phonegap version : 1.7<br />
-last update : 06/08/2012<br />
+phonegap version : 1.9<br />
+last update : 08/01/2013<br />
 <br />
 ![MLB](https://github.com/Wizcorp/phonegap-plugin-wizSpinner/raw/v1.7/screen.jpg)
 <br />
@@ -10,7 +10,7 @@ last update : 06/08/2012<br />
 
 PhoneGap plugin for creating and manipulating native loader/spinner above Cordova.
 <br />
-NOTE - Android is portrait only
+NOTE - Android is portrait only, barebones (many iOS features yet to be implemented T-T)
 <br />
 
 # USAGE :
