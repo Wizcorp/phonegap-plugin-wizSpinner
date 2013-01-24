@@ -7,11 +7,7 @@
  */
 
 #import <Foundation/Foundation.h>
-#ifdef CORDOVA_FRAMEWORK
 #import <Cordova/CDVPlugin.h>
-#else
-#import "CDVPlugin.h"
-#endif
 
 @interface WizSpinnerPlugin : CDVPlugin {
 
@@ -19,9 +15,9 @@
     bool shown;
 }
 
-- (void)create:(NSArray*)arguments withDict:(NSDictionary*)options;
-- (void)show:(NSArray*)arguments withDict:(NSDictionary*)options;
-- (void)hide:(NSArray*)arguments withDict:(NSDictionary*)options;
-- (void)rotate:(NSArray*)arguments withDict:(NSDictionary*)options;
+- (void)create:(CDVInvokedUrlCommand*)command;
+- (void)show:(CDVInvokedUrlCommand*)command;
+- (void)hide:(CDVInvokedUrlCommand*)command;
+- (void)rotate:(CDVInvokedUrlCommand*)command;
 
 @end
