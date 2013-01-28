@@ -271,7 +271,7 @@ static NSDictionary *defaults = nil;
 
 - (void)rotate:(CDVInvokedUrlCommand*)command
 {
-    NSNumber *orientation = [command.arguments objectAtIndex:1];
+    NSNumber *orientation = [command.arguments objectAtIndex:0];
     if (orientation) {
         [(CDVViewController *)self.viewController rotateCustomLoader:[orientation intValue]];
     }
