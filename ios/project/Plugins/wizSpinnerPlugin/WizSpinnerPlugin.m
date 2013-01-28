@@ -85,7 +85,9 @@ static NSDictionary *defaults = nil;
             WizSpinnerPlugin *plugin = [viewController getCommandInstance:@"WizSpinnerPlugin"];
             
             // Create the spinner with defaults
-            [plugin create:nil withDict:defaults];
+            CDVInvokedUrlCommand *cmd = [[CDVInvokedUrlCommand alloc] initWithArguments:[NSArray arrayWithObjects:defaults, nil] callbackId:@"" className:@"wizSpinnerPlugin" methodName:@"create"];
+            [plugin create:cmd];
+            [cmd release];
             
             // Auto-show the spinner (if requested)
             BOOL autoShowSpinnerOnStart = [[options objectForKey:@"autoShowSpinnerOnStart"] boolValue];
@@ -185,13 +187,13 @@ static NSDictionary *defaults = nil;
 
 
 
-- (void)create:(NSArray*)arguments withDict:(NSDictionary*)options
+- (void)create:(CDVInvokedUrlCommand*)command
 {
     // CREATE IS ALWAYS CALLED FROM AUTOMATICALLY AT APP START
     // This allows the spinner to be ready for action immediately.
     // use show() and hide() - with options or a default
     
-    NSString *callbackId = [arguments objectAtIndex:0];
+    NSDictionary *options = [command.arguments objectAtIndex:0];
     
     // NSLog(@"WARNING  - - - - - nativeSpinner.create() is depreciated. Create is called automatically by default.");
     
@@ -199,18 +201,20 @@ static NSDictionary *defaults = nil;
     
     CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
     [pluginResult setKeepCallbackAsBool:YES];
-    [self writeJavascript: [pluginResult toSuccessCallbackString:callbackId]];
+    [self writeJavascript: [pluginResult toSuccessCallbackString:command.callbackId]];
     
 }
 
-- (void)show:(NSArray*)arguments withDict:(NSDictionary*)options
+- (void)show:(CDVInvokedUrlCommand*)command
 {
     WizLog(@"******************************************show shown var = %i", shown);
     if (shown) {
         return;
     }
     int timeoutInt = 20;
-    if (options) 
+    
+    NSDictionary *options = [command.arguments objectAtIndex:0];
+    if (options)
 	{
         // use custom options
         
@@ -240,10 +244,12 @@ static NSDictionary *defaults = nil;
 }
 
 - (void)timedHide:(id)sender {
-    [self hide:NULL withDict:NULL];
+    CDVInvokedUrlCommand *cmd = [[CDVInvokedUrlCommand alloc] initWithArguments:[NSArray arrayWithObjects: nil] callbackId:@"" className:@"wizSpinnerPlugin" methodName:@"hide"];
+    [self hide:cmd];
+    [cmd release];
 }
 
-- (void)hide:(NSArray*)arguments withDict:(NSDictionary*)options
+- (void)hide:(CDVInvokedUrlCommand*)command
 {
     WizLog(@"******************************************hide shown var = %i", shown);
 
@@ -263,10 +269,11 @@ static NSDictionary *defaults = nil;
 }
 
 
-- (void)rotate:(NSArray*)arguments withDict:(NSDictionary*)options
+- (void)rotate:(CDVInvokedUrlCommand*)command
 {
-    if ([arguments objectAtIndex:1]) {
-        [(CDVViewController *)self.viewController rotateCustomLoader:[[arguments objectAtIndex:1] intValue]];
+    NSNumber *orientation = [command.arguments objectAtIndex:0];
+    if (orientation) {
+        [(CDVViewController *)self.viewController rotateCustomLoader:[orientation intValue]];
     }
 }
 
