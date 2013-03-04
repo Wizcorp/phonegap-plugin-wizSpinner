@@ -23,8 +23,9 @@
     // Split data into individual frames using ImageIO (iOS4.0 and above).
     NSMutableArray *frames = nil;
     CGImageSourceRef imgSource = CGImageSourceCreateWithData((CFDataRef)data, NULL);
+	size_t count;
     if ( imgSource ) {
-        size_t count = CGImageSourceGetCount(imgSource);
+        count = CGImageSourceGetCount(imgSource);
         frames = [NSMutableArray arrayWithCapacity:count];
         for ( size_t i = 0; i < count; i++ ) {
             // NSLog(@"frame - %d",i);
@@ -42,6 +43,8 @@
     self = [super initWithImage:[frames objectAtIndex:0]];
     if (self) {
         self.animationImages = frames;
+		// Assume 100 ms per frame:
+		self.animationDuration = count * 0.1;
     }
     
     return self;
