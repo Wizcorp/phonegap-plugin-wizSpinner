@@ -320,18 +320,18 @@
                 
                 // additional settings for the custom activity spinner
                 WizActivitySpinnerView *activitySpinner = (WizActivitySpinnerView*)[spinnerHolder viewWithTag:45];
-                if ( [options objectForKey:@"spinnerDuration"] ) {
-                    NSTimeInterval spinnerDuration = [[options objectForKey:@"spinnerDuration"] floatValue];
-                    if ( spinnerDuration <= 0 ) {
+                if ( [options objectForKey:@"spinDuration"] ) {
+                    NSTimeInterval spinDuration = [[options objectForKey:@"spinDuration"] floatValue];
+                    if ( spinDuration <= 0 ) {
                         // Set animation duration to the default which is (according to UIImageView documentation)
                         // the number of images multiplied by 1/30th of a second.
-                        spinnerDuration = [activitySpinner.image.images count] / 30.0;
+                        spinDuration = [activitySpinner.image.images count] / 30.0;
                     }
-                    [activitySpinner setAnimationDuration:spinnerDuration];
+                    [activitySpinner setAnimationDuration:spinDuration];
                 }
-                if ( [[options objectForKey:@"spinnerLoops"] intValue] ) {
-                    NSInteger spinnerLoops = MAX( 0, [[options objectForKey:@"spinnerLoops"] intValue] );
-                    [activitySpinner setAnimationRepeatCount:spinnerLoops];
+                if ( [options objectForKey:@"spinLoops"] ) {
+                    NSInteger spinLoops = MAX( 0, [[options objectForKey:@"spinLoops"] intValue] );
+                    [activitySpinner setAnimationRepeatCount:spinLoops];
                 }
 
                 // set text label
@@ -447,8 +447,8 @@
     NSString *spinnerColor  = @"white";
     CGFloat width           = 0.0;
     CGFloat height          = 0.0;
-    NSTimeInterval spinnerDuration = 0;
-    NSInteger spinnerLoops = 0;
+    NSTimeInterval spinDuration = 0;
+    NSInteger spinLoops = 0;
     NSString *customSpinnerPath = @"default";
     
     if (options) {      
@@ -501,8 +501,8 @@
         width = [[options objectForKey:@"width"] floatValue];
         height = [[options objectForKey:@"height"] floatValue];
         
-        spinnerDuration = [[options objectForKey:@"spinnerDuration"] floatValue];
-        spinnerLoops = [[options objectForKey:@"spinnerLoops"] intValue];
+        spinDuration = [[options objectForKey:@"spinDuration"] floatValue];
+        spinLoops = [[options objectForKey:@"spinLoops"] intValue];
     }
 
     // the holder for everything
@@ -599,11 +599,11 @@
     [activitySpinner setCenter:CGPointMake(screenWidth/2, screenHeight/2)];
     [activitySpinner setAlpha:1.0];
     [activitySpinner setBackgroundColor:[UIColor clearColor]];
-    if ( spinnerDuration > 0 ) {
-        [activitySpinner setAnimationDuration:spinnerDuration];
+    if ( spinDuration > 0 ) {
+        [activitySpinner setAnimationDuration:spinDuration];
     }
-    if ( spinnerLoops > 0 ) {
-        [activitySpinner setAnimationRepeatCount:spinnerLoops];
+    if ( spinLoops > 0 ) {
+        [activitySpinner setAnimationRepeatCount:spinLoops];
     }
     [activitySpinner startAnimating];
     [activitySpinner setTag:45];
