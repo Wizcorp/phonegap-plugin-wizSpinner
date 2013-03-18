@@ -92,7 +92,9 @@ static NSDictionary *defaults = nil;
             // Auto-show the spinner (if requested)
             BOOL autoShowSpinnerOnStart = [[options objectForKey:@"autoShowSpinnerOnStart"] boolValue];
             if ( autoShowSpinnerOnStart ) {
-                [plugin show:nil withDict:defaults];
+                CDVInvokedUrlCommand *cmd = [[CDVInvokedUrlCommand alloc] initWithArguments:[NSArray arrayWithObjects:defaults, nil] callbackId:@"" className:@"wizSpinnerPlugin" methodName:@"show"];
+                [plugin show:cmd];
+                [cmd release];
             }
         }
     }    
