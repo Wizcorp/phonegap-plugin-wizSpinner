@@ -55,6 +55,12 @@ Options<br />
 
     height	:	150 - default is natural custom image size
 	int in pixels of spinner height if rescaling a custom spinner
+
+    spinLoops	:	0 - default is 0, which specifies to repeat the animation indefinitely.
+	int specifying the number of times to repeat the animation of a custom spinner
+
+    spinDuration	:	1.0 - default is equal to the number of images in the custom spinner multiplied by 1/30th of a second. Thus, if you had 30 images, the value would be 1 second.
+	float indicating the time duration measured in seconds
 </code></pre>
 <br />
 # EXAMPLE CODE : #
