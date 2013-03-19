@@ -300,7 +300,7 @@
                 CGFloat screenHeight = screenRect.size.height;
                 
                 
-                // aditional settings for apple spinner
+                // additional settings for apple spinner
                 UIActivityIndicatorView *appleSpinner = (UIActivityIndicatorView*)[spinnerHolder viewWithTag:48];
                 if ([spinnerColor isEqualToString:@"white"]) {
                     [appleSpinner setActivityIndicatorViewStyle:UIActivityIndicatorViewStyleWhiteLarge];
@@ -318,7 +318,21 @@
                     [appleSpinner setCenter:CGPointMake(screenWidth/2, screenHeight/2)];
                 }
                 
-                
+                // additional settings for the custom activity spinner
+                WizActivitySpinnerView *activitySpinner = (WizActivitySpinnerView*)[spinnerHolder viewWithTag:45];
+                if ( [options objectForKey:@"spinDuration"] ) {
+                    NSTimeInterval spinDuration = [[options objectForKey:@"spinDuration"] floatValue];
+                    if ( spinDuration <= 0 ) {
+                        // Set animation duration to the default which is (according to UIImageView documentation)
+                        // the number of images multiplied by 1/30th of a second.
+                        spinDuration = [activitySpinner.image.images count] / 30.0;
+                    }
+                    [activitySpinner setAnimationDuration:spinDuration];
+                }
+                if ( [options objectForKey:@"spinLoops"] ) {
+                    NSInteger spinLoops = MAX( 0, [[options objectForKey:@"spinLoops"] intValue] );
+                    [activitySpinner setAnimationRepeatCount:spinLoops];
+                }
 
                 // set text label
                 UITextView *textBox = (UITextView*)[spinnerHolder viewWithTag:46];
@@ -340,22 +354,25 @@
                 if (showSpinner == 1) {
                     if (customSpinner == 1) {
                         // set custom spinner visible
-                        [[spinnerHolder viewWithTag:45] setHidden:FALSE];
-                        [[spinnerHolder viewWithTag:45] setAlpha:1.0];
-                        [[spinnerHolder viewWithTag:48] setHidden:TRUE];
-                        [[spinnerHolder viewWithTag:48] setAlpha:0.0];
+                        [activitySpinner setHidden:FALSE];
+                        [activitySpinner setAlpha:1.0];
+                        [activitySpinner startAnimating];
+                        [appleSpinner setHidden:TRUE];
+                        [appleSpinner setAlpha:0.0];
                     } else {
                         // set Apple Spinner visible
-                        [[spinnerHolder viewWithTag:45] setHidden:TRUE];
-                        [[spinnerHolder viewWithTag:45] setAlpha:0.0];
-                        [[spinnerHolder viewWithTag:48] setHidden:FALSE];
-                        [[spinnerHolder viewWithTag:48] setAlpha:1.0];
+                        [activitySpinner setHidden:TRUE];
+                        [activitySpinner setAlpha:0.0];
+                        [activitySpinner stopAnimating];
+                        [appleSpinner setHidden:FALSE];
+                        [appleSpinner setAlpha:1.0];
                     }
                 } else {
-                    [[spinnerHolder viewWithTag:48] setHidden:TRUE];
-                    [[spinnerHolder viewWithTag:48] setAlpha:0.0];
-                    [[spinnerHolder viewWithTag:45] setHidden:TRUE];
-                    [[spinnerHolder viewWithTag:45] setAlpha:0.0];
+                    [appleSpinner setHidden:TRUE];
+                    [appleSpinner setAlpha:0.0];
+                    [activitySpinner setHidden:TRUE];
+                    [activitySpinner setAlpha:0.0];
+                    [activitySpinner stopAnimating];
                 }
                 
                 
@@ -430,6 +447,8 @@
     NSString *spinnerColor  = @"white";
     CGFloat width           = 0.0;
     CGFloat height          = 0.0;
+    NSTimeInterval spinDuration = 0;
+    NSInteger spinLoops = 0;
     NSString *customSpinnerPath = @"default";
     
     if (options) {      
@@ -482,6 +501,8 @@
         width = [[options objectForKey:@"width"] floatValue];
         height = [[options objectForKey:@"height"] floatValue];
         
+        spinDuration = [[options objectForKey:@"spinDuration"] floatValue];
+        spinLoops = [[options objectForKey:@"spinLoops"] intValue];
     }
 
     // the holder for everything
@@ -578,6 +599,12 @@
     [activitySpinner setCenter:CGPointMake(screenWidth/2, screenHeight/2)];
     [activitySpinner setAlpha:1.0];
     [activitySpinner setBackgroundColor:[UIColor clearColor]];
+    if ( spinDuration > 0 ) {
+        [activitySpinner setAnimationDuration:spinDuration];
+    }
+    if ( spinLoops > 0 ) {
+        [activitySpinner setAnimationRepeatCount:spinLoops];
+    }
     [activitySpinner startAnimating];
     [activitySpinner setTag:45];
     [activitySpinner setClipsToBounds:TRUE];
