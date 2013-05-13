@@ -1,8 +1,8 @@
 # PLUGIN: 
 
 phonegap-plugin-wizSpinner<br />
-phonegap version : 2.3<br />
-last update : 24/01/2013<br />
+phonegap version : 2.7<br />
+last update : 13/05/2013<br />
 <br />
 ![MLB](https://github.com/Wizcorp/phonegap-plugin-wizSpinner/raw/v1.7/screen.jpg)
 <br />
