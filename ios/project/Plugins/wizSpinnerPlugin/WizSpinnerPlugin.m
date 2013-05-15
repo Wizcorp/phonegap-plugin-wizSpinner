@@ -16,7 +16,7 @@
 + (void)willTerminate:(NSNotification *)notification;
 @end
 
-static NSDictionary *defaults = nil;
+static NSMutableDictionary *defaults = nil;
 
 @implementation WizSpinnerPlugin
 
@@ -68,18 +68,34 @@ static NSDictionary *defaults = nil;
                             format:@"Missing wizSpinner.plist -- required when using the wizSpinner plugin.  Please add it to your application bundle."];
             }
             
-            // Read specified defaults.
-            defaults = [options objectForKey:@"defaults"];
+            // Initialize plugin defaults.
             if ( defaults == nil ) {
-                defaults = [[NSDictionary alloc] initWithObjectsAndKeys:
+                defaults = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
                             @"middle",              @"position",
                             @"0.7",                 @"opacity",
                             @"white",               @"spinnerColor",
                             @"white",               @"textColor",
-                            @"Initializing App...", @"label",
+                            @"Loading...",          @"label",
+                            @"#fff",                @"color",
+                            @"#000",                @"bgColor",
+                            @"#000",                @"transparent",
+                            @"0.0",                 @"width",
+                            @"0.0",                 @"height",
+                            @"0",                   @"spinLoops",
+                            @"0",                   @"spinDuration",
+                            @NO,                    @"customSpinner",
+                            @YES,                   @"showSpinner",
+                            @"default",             @"customSpinnerPath",
                             nil];
+                [defaults retain];
             }
-            [defaults retain];
+            
+            // Read plist-specified defaults (and override plugin defaults).
+            NSDictionary *plistDefaults = [options objectForKey:@"defaults"];
+            NSString *key;
+            for ( key in plistDefaults ) {
+                [defaults setObject:[plistDefaults objectForKey:key] forKey:key];
+            }
 
             // Create/get the singleton.
             WizSpinnerPlugin *plugin = [viewController getCommandInstance:@"WizSpinnerPlugin"];
@@ -215,19 +231,22 @@ static NSDictionary *defaults = nil;
     }
     int timeoutInt = 20;
     
-    NSDictionary *options = [command.arguments objectAtIndex:0];
-    if (options)
+    NSMutableDictionary *options = [NSMutableDictionary dictionaryWithDictionary:defaults];
+    NSDictionary *showOptions = [command.arguments objectAtIndex:0];
+
+    if (showOptions)
 	{
         // use custom options
-        
+        NSString *key;
+        for ( key in showOptions ) {
+            [options setObject:[showOptions objectForKey:key] forKey:key];
+        }
         
         int timeoutOpt            = [[options objectForKey:@"timeout"] intValue];
         if (timeoutOpt) {
             // default show it
             timeoutInt = timeoutOpt;
         }
-    } else {
-        options = defaults;
     }
     
     WizLog(@"****************************************** timeout is %i seconds", timeoutInt);

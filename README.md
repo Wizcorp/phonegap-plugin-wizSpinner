@@ -66,12 +66,6 @@ Options<br />
 # EXAMPLE CODE : #
 <br />
 <br />
-Create spinner<br />
-<pre><code>
-wizSpinner.create(JSONObject options);
-</pre></code>
-<br />
-<br />
 Show spinner<br />
 <pre><code>
 wizSpinner.show(JSONObject options);

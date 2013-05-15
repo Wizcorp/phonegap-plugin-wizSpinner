@@ -48,7 +48,7 @@ var wizSpinner = {
     
 	create: function(options, s, f) {
 	    
-	    return cordova.exec(s, f, 'wizSpinnerPlugin', 'create', [options]);
+	    console.warn("This method 'wizSpinner.create()' is deprecated. Create is called automatically. You can override the spinner options in show() if required to do so.");
 	    
 	},
 
