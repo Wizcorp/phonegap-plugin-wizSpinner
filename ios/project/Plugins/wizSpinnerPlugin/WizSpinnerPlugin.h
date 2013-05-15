@@ -15,7 +15,6 @@
     bool shown;
 }
 
-- (void)create:(CDVInvokedUrlCommand*)command;
 - (void)show:(CDVInvokedUrlCommand*)command;
 - (void)hide:(CDVInvokedUrlCommand*)command;
 - (void)rotate:(CDVInvokedUrlCommand*)command;
