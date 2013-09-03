@@ -1,4 +1,4 @@
-package jp.wizcorp.phonegap.plugin.WizSpinner;
+package jp.wizcorp.phonegap.plugin.wizSpinner;
 
 import org.json.JSONArray;
 import org.json.JSONException;
