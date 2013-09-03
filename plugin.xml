@@ -27,9 +27,10 @@
     <!-- android -->
     <platform name="android">
 
-    <config-file target="res/xml/config.xml" parent="/widget">
-        <plugin name="wizSpinnerPlugin"
-            value="jp.wizcorp.phonegap.plugin.wizSpinner.WizSpinnerPlugin"/>
+    <config-file target="res/xml/config.xml" parent="/*">
+		<feature name="WizSpinnerPlugin" >
+			<param name="android-package" value="jp.wizcorp.phonegap.plugin.wizSpinner.WizSpinnerPlugin"/>
+		</feature>
     </config-file>
     
     <config-file target="AndroidManifest.xml" parent="/manifest/application">
@@ -43,7 +44,7 @@
     <source-file src="android/jp/wizcorp/phonegap/plugin/wizSpinner/WizSpinnerPlugin.java" 
             target-dir="src/jp/wizcrop/phonegap/plugin/wizSpinner"/>
     <source-file src="android/jp/wizcorp/phonegap/plugin/wizSpinner/WizSpinner.java" 
-            target-dir="src/jp/wizcrop/phonegap/plugin/wizSpinner"/> 
+            target-dir="src/jp/wizcorp/phonegap/plugin/wizSpinner"/> 
 
     </platform>
 
