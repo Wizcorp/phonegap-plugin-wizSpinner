@@ -19,9 +19,8 @@
 
 package org.apache.cordova.example;
 
-import android.app.Activity;
 import android.os.Bundle;
-import org.apache.cordova.*;
+import org.apache.cordova.DroidGap;
 
 public class cordovaExample extends DroidGap
 {
