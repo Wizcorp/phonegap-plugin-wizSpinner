@@ -52,7 +52,7 @@
     <plugin name="Echo" value="org.apache.cordova.Echo" />
     <plugin name="Globalization" value="org.apache.cordova.Globalization"/>
     <plugin name="InAppBrowser" value="org.apache.cordova.InAppBrowser"/>
-    <plugin name="wizSpinnerPlugin" value="jp.wizcorp.phonegap.plugin.WizSpinner.WizSpinnerPlugin"/>
+    <plugin name="wizSpinnerPlugin" value="jp.wizcorp.phonegap.plugin.wizSpinner.WizSpinnerPlugin"/>
 </plugins>
 </cordova>
 

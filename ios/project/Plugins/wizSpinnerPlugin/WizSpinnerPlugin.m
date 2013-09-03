@@ -215,9 +215,9 @@ static NSDictionary *defaults = nil;
     }
     int timeoutInt = 20;
     
-    NSDictionary *options = [command.arguments objectAtIndex:0];
-    if (options)
-	{
+    NSDictionary *options;
+    if ([command.arguments count] > 1) {
+        options = [command.arguments objectAtIndex:0];
         // use custom options
         
         

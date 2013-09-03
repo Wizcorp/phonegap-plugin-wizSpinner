@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin xmlns="http://www.phonegap.com/ns/plugins/1.0"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    id="jp.wizcorp.phonegap.plugin.wizSpinner.wizSpinnerPlugin"
+    version="1.0.0">
+
+    <name>Wizard Spinner Plugin</name>
+    
+    <description>This plugin allows you to create native spinners & loaders above your HTML application layer.</description>
+    
+    <author>Ally Ogilvie - aogilvie@wizcorp.jp</author>
+    
+    <keywords>spinner,loader</keywords>
+	
+	<engines>
+	    <engine name="cordova" version=">=2.6.0" />
+	</engines>
+
+    <license>MIT</license>
+
+    <js-module src="www/phonegap/plugin/wizSpinner/wizSpinner.js" name="wizSpinnerPlugin" target="phonegap/plugin/wizSpinner/wizSpinner.js">
+        <clobbers target="window.wizSpinner" />
+    </js-module>
+
+    <asset src="www/phonegap/plugin/wizSpinner/spinner.gif" target="phonegap/plugin/wizSpinner/spinner.gif" />
+
+    <!-- android -->
+    <platform name="android">
+
+    <config-file target="res/xml/config.xml" parent="/widget">
+        <plugin name="wizSpinnerPlugin"
+            value="jp.wizcorp.phonegap.plugin.wizSpinner.WizSpinnerPlugin"/>
+    </config-file>
+    
+    <config-file target="AndroidManifest.xml" parent="/manifest/application">
+        <activity android:name="com.custom.plugin.CustomCordovaPlugin"
+            android:label="@string/app_name">
+            <intent-filter>
+            </intent-filter>
+        </activity>
+    </config-file>
+
+    <source-file src="android/jp/wizcorp/phonegap/plugin/wizSpinner/WizSpinnerPlugin.java" 
+            target-dir="src/jp/wizcrop/phonegap/plugin/wizSpinner"/>
+    <source-file src="android/jp/wizcorp/phonegap/plugin/wizSpinner/WizSpinner.java" 
+            target-dir="src/jp/wizcrop/phonegap/plugin/wizSpinner"/> 
+
+    </platform>
+
+    <!-- ios -->
+    <platform name="ios">
+
+        <config-file target="config.xml" parent="/*">
+        	<feature name="WizSpinnerPlugin">
+                <param name="ios-package" value="WizSpinnerPlugin"/>
+                <param name="onload" value="true" />
+            </feature>
+        	<plugin name="WizSpinnerPlugin" value="WizSpinnerPlugin"/>
+        </config-file>
+               
+        <header-file src="ios/project/Plugins/wizSpinnerPlugin/WizActivitySpinnerView.h" 
+        	target-dir="wizSpinner" />
+        <source-file src="ios/project/Plugins/wizSpinnerPlugin/WizActivitySpinnerView.m" compiler-flags="-fno-objc-arc"
+        	target-dir="wizSpinner" />
+        <header-file src="ios/project/Plugins/wizSpinnerPlugin/WizSpinnerPlugin.h"
+        	target-dir="wizSpinner" />
+        <source-file src="ios/project/Plugins/wizSpinnerPlugin/WizSpinnerPlugin.m" compiler-flags="-fno-objc-arc"
+        	target-dir="wizSpinner" />
+        <header-file src="ios/project/Plugins/wizSpinnerPlugin/WizAssetsPluginExtendCDVViewController.h"
+        	target-dir="wizSpinner" />
+        <source-file src="ios/project/Plugins/wizSpinnerPlugin/WizAssetsPluginExtendCDVViewController.m" compiler-flags="-fno-objc-arc"
+        	target-dir="wizSpinner" />
+        <source-file src="ios/project/Plugins/wizSpinnerPlugin/WizAssetsPluginExtendCDVViewControllerPrivate.h"
+        	target-dir="wizSpinner" /> 
+        <header-file src="ios/project/Plugins/wizSpinnerPlugin/WizDebugLog.h"
+        	target-dir="wizSpinner" />
+        
+        <source-file src="ios/project/Plugins/wizSpinnerPlugin/wizSpinner.plist"
+        	target-dir="wizSpinner" />
+        
+        <framework src="ImageIO.framework" />
+
+    </platform>
+    
+    <license>MIT</license>
+
+</plugin>

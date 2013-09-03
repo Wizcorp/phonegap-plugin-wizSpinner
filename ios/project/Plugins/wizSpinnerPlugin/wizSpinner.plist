@@ -11,9 +11,9 @@
 		<key>spinnerColor</key>
 		<string>white</string>
 		<key>label</key>
-		<string>Default Label :)</string>
+		<string>My Label :)</string>
 		<key>opacity</key>
-		<real>0.5</real>
+		<real>0</real>
 	</dict>
 </dict>
 </plist>

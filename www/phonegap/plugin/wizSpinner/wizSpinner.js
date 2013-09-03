@@ -1,17 +1,15 @@
-/* Spinner/Loader Cordova Plugin - JavaScript side of the bridge to iOS
+cordova.define("jp.wizcorp.phonegap.plugin.wizSpinner.wizSpinnerPlugin.wizSpinnerPlugin", function(require, exports, module) {/* Spinner/Loader Cordova Plugin - JavaScript side of the bridge to iOS
  *
  * @author Ally Ogilvie
- * @copyright WizCorp Inc. [ Incorporated Wizards ] 2012
- * @file JavaScript wizSpinner for Cordova
+ * @copyright Wizcorp Inc. [ Incorporated Wizards ] 2013
+ * @file wizSpinner.js
  *
  */
 
 /*
- 
- ============= example code ====================
- 
- function shouldRotateToOrientation (orientation)
- {
+ ============= Example rotation code ====================
+
+ function shouldRotateToOrientation (orientation) {
  if (deviceIsReady == true) {
  switch (orientation) {
  case 0:
@@ -32,48 +30,58 @@
  case 180:
  // portrait upside down
  return false;
- break
+ break;
  }
  }
  }
- 
- 
- function onDeviceReady()
- {
+
+ function onDeviceReady() {
  deviceIsReady = true;
  }
  */
 
-var wizSpinner = {
-    
-	create: function(options, s, f) {
-	    
-	    return cordova.exec(s, f, 'wizSpinnerPlugin', 'create', [options]);
-	    
-	},
+var exec = require("cordova/exec");
 
-    
-	show: function(options) {
-	    
-	    if(typeof(options) == "undefined") {
-	        
-	        return cordova.exec(null, null, 'wizSpinnerPlugin', 'show', []);
-	    } else {
-	        return cordova.exec(null, null, 'wizSpinnerPlugin', 'show', [options]);
-	    }
-	    
-	    
-	},
-	    
-	hide: function() {
-	    
-	    return cordova.exec(null, null, 'wizSpinnerPlugin', 'hide', []);
-	    
-	},
-	    
-	rotate: function(orientation) {
-	    cordova.exec(null, null, 'wizSpinnerPlugin', 'rotate', [orientation]);
-	}
-    
-    
+var WizSpinner = function () {
 };
+
+WizSpinner.prototype.throwError = function (cb, error) {
+    if (cb) {
+        cb(error);
+    } else {
+        throw error;
+    }
+};
+
+// Object stringifier helper
+WizSpinner.prototype.propsToString = function (obj) {
+    // Stringify all vars
+    for (var i in obj) {
+        if (obj.hasOwnProperty(i)) {
+            obj[i] = '' + obj[i];
+        }
+    }
+}
+
+WizSpinner.prototype.create = function (options) {
+    this.propsToString(options);
+    exec(win, fail, 'WizSpinnerPlugin', 'create', [options]);
+};
+
+WizSpinner.prototype.show = function (options) {
+    this.propsToString(options);
+    exec(null, null, 'WizSpinnerPlugin', 'show', [options]);
+};
+
+WizSpinner.prototype.hide = function (options) {
+    this.propsToString(options);
+    exec(null, null, 'WizSpinnerPlugin', 'hide', [options]);
+};
+
+WizSpinner.prototype.rotate = function (orientation) {
+    exec(null, null, 'WizSpinnerPlugin', 'rotate', [orientation]);
+};
+
+// Instantiate the wizSpinner
+var wizSpinner = new WizSpinner();
+module.exports = wizSpinner;});
