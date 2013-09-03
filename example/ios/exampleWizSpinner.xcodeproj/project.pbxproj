@@ -411,7 +411,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cp -r $PROJECT_DIR/../www $PROJECT_DIR\ncp -r $PROJECT_DIR/../../www/phonegap $PROJECT_DIR/www";
+			shellScript = "cp -r $PROJECT_DIR/../www $PROJECT_DIR\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
