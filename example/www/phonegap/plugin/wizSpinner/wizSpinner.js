@@ -1,4 +1,4 @@
-cordova.define("jp.wizcorp.phonegap.plugin.wizSpinner.wizSpinnerPlugin.wizSpinnerPlugin", function(require, exports, module) {/* Spinner/Loader Cordova Plugin - JavaScript side of the bridge to iOS
+cordova.define("jp.wizcorp.phonegap.plugin.wizSpinnerPlugin", function(require, exports, module) {/* Spinner/Loader Cordova Plugin - JavaScript side of the bridge to iOS
  *
  * @author Ally Ogilvie
  * @copyright Wizcorp Inc. [ Incorporated Wizards ] 2013
