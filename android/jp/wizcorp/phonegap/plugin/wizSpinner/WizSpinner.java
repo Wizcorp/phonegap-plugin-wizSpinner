@@ -13,8 +13,9 @@ import android.util.Log;
 public class WizSpinner {
 	
 	private static ProgressDialog pd;
+	private static String TAG = "WizSpinner";
 	public static boolean isVisible = false;
-
+	
 
 	public static void show(Activity activity, JSONArray data) {
 		// create and show the spinner
@@ -29,8 +30,19 @@ public class WizSpinner {
 		}
 		if (dataObj != null ) {
 			if ( dataObj.has("labelText")) {
+				/*
+					"labelText" is deprecated in v3.0 iOS. "label" is the correct
+					property to be used on both Android and iOS. Show info log.
+				*/
+				Log.i(TAG, "\"labelText\" is deprecated in v3.0. Use \"label\"");
 				try {
 					text = (String) dataObj.get("labelText");
+				} catch (JSONException e) {
+					// failed for some reason
+				}
+			} else if ( dataObj.has("label")) {
+				try {
+					text = (String) dataObj.get("label");
 				} catch (JSONException e) {
 					// failed for some reason
 				}
