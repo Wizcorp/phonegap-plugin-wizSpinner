@@ -13,7 +13,7 @@ PhoneGap plugin for creating and manipulating native loader/spinner above Cordov
 
 # Install (iOS & Android with Plugman) 
 
-	cordova plugin add https://github.com/Wizcorp/phonegap-plugin-wizSpinner/tree/v3.0
+	cordova plugin add https://github.com/Wizcorp/phonegap-plugin-wizSpinner
 
 # Install (iOS) 
 
