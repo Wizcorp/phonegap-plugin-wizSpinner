@@ -1,9 +1,6 @@
 # phonegap-plugin-wizSpinner 
 
-- PhoneGap Version : 3.0
-- last update : 03/09/2013
-
-
+- PhoneGap Version : 3.3
 
 # Description
 
@@ -14,13 +11,6 @@ PhoneGap plugin for creating and manipulating native loader/spinner above Cordov
 # Install (iOS & Android with Plugman) 
 
 	cordova plugin add https://github.com/Wizcorp/phonegap-plugin-wizSpinner
-
-# Install (iOS) 
-
-- For iOS, add the following frameworks:
-	- ImageIO.framework
-	
-See example project.
 
 # Example Code
 
