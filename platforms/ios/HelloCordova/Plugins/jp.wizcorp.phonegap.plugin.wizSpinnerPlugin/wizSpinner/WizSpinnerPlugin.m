@@ -203,8 +203,7 @@ static NSDictionary *defaults = nil;
     
     CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
     [pluginResult setKeepCallbackAsBool:YES];
-    [self writeJavascript: [pluginResult toSuccessCallbackString:command.callbackId]];
-    
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
 
 - (void)show:(CDVInvokedUrlCommand*)command
