@@ -1,11 +1,7 @@
-.DS_Store
+*.DS_Store
 
 #iOS
-example/ios/exampleWizSpinner.xcodeproj/xcuserdata/*
-example/ios/exampleWizSpinner.xcodeproj/project.xcworkspace/*
-example/ios/CordovaLib/CordovaLib.xcodeproj/xcuserdata/*
-example/ios/www/*
-!example/ios/www/cordova-2.3.0.js
+xcuserdata
 
 #Android
 bin/
