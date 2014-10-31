@@ -78,8 +78,9 @@
         self.supportedOrientations = [self parseInterfaceOrientations:
             [[[NSBundle mainBundle] infoDictionary] objectForKey:@"UISupportedInterfaceOrientations"]];
 
+        [self printVersion];
         [self printMultitaskingInfo];
-        [self printDeprecationNotice];
+        [self printPlatformVersionWarning];
         self.initialized = YES;
 
         // load config.xml settings
@@ -118,10 +119,15 @@
     [super viewWillDisappear:animated];
 }
 
-- (void)printDeprecationNotice
+- (void)printVersion
 {
-    if (!IsAtLeastiOSVersion(@"5.0")) {
-        NSLog(@"CRITICAL: For Cordova 2.0, you will need to upgrade to at least iOS 5.0 or greater. Your current version of iOS is %@.",
+    NSLog(@"Apache Cordova native platform version %@ is starting.", CDV_VERSION);
+}
+
+- (void)printPlatformVersionWarning
+{
+    if (!IsAtLeastiOSVersion(@"6.0")) {
+        NSLog(@"CRITICAL: For Cordova 3.5.0 and above, you will need to upgrade to at least iOS 6.0 or greater. Your current version of iOS is %@.",
             [[UIDevice currentDevice] systemVersion]
             );
     }
@@ -215,10 +221,14 @@
             self.loadFromString = YES;
             appURL = nil;
         } else {
-            // CB-3005 we know that the page exists : reconstruct full path from bundle
-            NSURL* relativeURL = [NSURL fileURLWithPath:[[NSBundle mainBundle] bundlePath]];
-            NSString* localURL = [NSString stringWithFormat:@"%@/%@", self.wwwFolderName, self.startPage];
-            appURL = [NSURL URLWithString:localURL relativeToURL:relativeURL];
+            appURL = [NSURL fileURLWithPath:startFilePath];
+            // CB-3005 Add on the query params or fragment.
+            NSString* startPageNoParentDirs = self.startPage;
+            NSRange r = [startPageNoParentDirs rangeOfCharacterFromSet:[NSCharacterSet characterSetWithCharactersInString:@"?#"] options:0];
+            if (r.location != NSNotFound) {
+                NSString* queryAndOrFragment = [self.startPage substringFromIndex:r.location];
+                appURL = [NSURL URLWithString:queryAndOrFragment relativeToURL:appURL];
+            }
         }
     }
 
@@ -238,7 +248,16 @@
 
     // // Instantiate the WebView ///////////////
 
-    [self createGapView];
+    if (!self.webView) {
+        [self createGapView];
+    }
+
+    // Configure WebView
+    _webViewDelegate = [[CDVWebViewDelegate alloc] initWithDelegate:self];
+    self.webView.delegate = _webViewDelegate;
+
+    // register this viewcontroller with the NSURLProtocol, only after the User-Agent is set
+    [CDVURLProtocol registerViewController:self];
 
     // /////////////////
 
@@ -292,6 +311,11 @@
                 }
             }
         }
+    }
+
+    NSString* decelerationSetting = [self settingForKey:@"UIWebViewDecelerationSpeed"];
+    if (![@"fast" isEqualToString : decelerationSetting]) {
+        [self.webView.scrollView setDecelerationRate:UIScrollViewDecelerationRateNormal];
     }
 
     /*
@@ -488,8 +512,8 @@
 {
     // First, ask the webview via JS if it supports the new orientation
     NSString* jsCall = [NSString stringWithFormat:
-        @"window.shouldRotateToOrientation && window.shouldRotateToOrientation(%d);"
-        , [self mapIosOrientationToJsOrientation:interfaceOrientation]];
+        @"window.shouldRotateToOrientation && window.shouldRotateToOrientation(%ld);"
+        , (long)[self mapIosOrientationToJsOrientation:interfaceOrientation]];
     NSString* res = [webView stringByEvaluatingJavaScriptFromString:jsCall];
 
     if ([res length] > 0) {
@@ -551,19 +575,11 @@
 
     webViewBounds.origin = self.view.bounds.origin;
 
-    if (!self.webView) {
-        self.webView = [self newCordovaViewWithFrame:webViewBounds];
-        self.webView.autoresizingMask = (UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight);
+    self.webView = [self newCordovaViewWithFrame:webViewBounds];
+    self.webView.autoresizingMask = (UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight);
 
-        [self.view addSubview:self.webView];
-        [self.view sendSubviewToBack:self.webView];
-
-        _webViewDelegate = [[CDVWebViewDelegate alloc] initWithDelegate:self];
-        self.webView.delegate = _webViewDelegate;
-
-        // register this viewcontroller with the NSURLProtocol, only after the User-Agent is set
-        [CDVURLProtocol registerViewController:self];
-    }
+    [self.view addSubview:self.webView];
+    [self.view sendSubviewToBack:self.webView];
 }
 
 - (void)didReceiveMemoryWarning
@@ -650,6 +666,33 @@
      */
     if ([[url scheme] isEqualToString:@"gap"]) {
         [_commandQueue fetchCommandsFromJs];
+        // The delegate is called asynchronously in this case, so we don't have to use
+        // flushCommandQueueWithDelayedJs (setTimeout(0)) as we do with hash changes.
+        [_commandQueue executePending];
+        return NO;
+    }
+
+    if ([[url fragment] hasPrefix:@"%01"] || [[url fragment] hasPrefix:@"%02"]) {
+        // Delegate is called *immediately* for hash changes. This means that any
+        // calls to stringByEvaluatingJavascriptFromString will occur in the middle
+        // of an existing (paused) call stack. This doesn't cause errors, but may
+        // be unexpected to callers (exec callbacks will be called before exec() even
+        // returns). To avoid this, we do not do any synchronous JS evals by using
+        // flushCommandQueueWithDelayedJs.
+        NSString* inlineCommands = [[url fragment] substringFromIndex:3];
+        if ([inlineCommands length] == 0) {
+            // Reach in right away since the WebCore / Main thread are already synchronized.
+            [_commandQueue fetchCommandsFromJs];
+        } else {
+            inlineCommands = [inlineCommands stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+            [_commandQueue enqueueCommandBatch:inlineCommands];
+        }
+        // Switch these for minor performance improvements, and to really live on the wild side.
+        // Callbacks will occur in the middle of the location.hash = ... statement!
+        [(CDVCommandDelegateImpl*)_commandDelegate flushCommandQueueWithDelayedJs];
+        // [_commandQueue executePending];
+
+        // Although we return NO, the hash change does end up taking effect.
         return NO;
     }
 
@@ -660,7 +703,7 @@
         CDVPlugin* plugin = [pluginObjects objectForKey:pluginName];
         SEL selector = NSSelectorFromString(@"shouldOverrideLoadWithRequest:navigationType:");
         if ([plugin respondsToSelector:selector]) {
-            if ((BOOL)objc_msgSend(plugin, selector, request, navigationType) == YES) {
+            if (((BOOL (*)(id, SEL, id, int))objc_msgSend)(plugin, selector, request, navigationType) == YES) {
                 return NO;
             }
         }

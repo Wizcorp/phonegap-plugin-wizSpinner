@@ -27,7 +27,9 @@
 #import "CDVViewController.h"
 
 @interface CDVHTTPURLResponse : NSHTTPURLResponse
-@property (nonatomic) NSInteger statusCode;
+#ifndef __IPHONE_8_0
+                                    @property (nonatomic) NSInteger statusCode;
+#endif
 @end
 
 static CDVWhitelist* gWhitelist = nil;
@@ -35,7 +37,7 @@ static CDVWhitelist* gWhitelist = nil;
 // the actual pointer to avoid retaining.
 static NSMutableSet* gRegisteredControllers = nil;
 
-NSString* const kCDVAssetsLibraryPrefixs = @"assets-library://";
+NSString* const kCDVAssetsLibraryPrefixes = @"assets-library://";
 
 // Returns the registered view controller that sent the given request.
 // If the user-agent is not from a UIWebView, or if it's from an unregistered one,
@@ -110,7 +112,7 @@ static CDVViewController *viewControllerForRequest(NSURLRequest* request)
     NSURL* theUrl = [theRequest URL];
     CDVViewController* viewController = viewControllerForRequest(theRequest);
 
-    if ([[theUrl absoluteString] hasPrefix:kCDVAssetsLibraryPrefixs]) {
+    if ([[theUrl absoluteString] hasPrefix:kCDVAssetsLibraryPrefixes]) {
         return YES;
     } else if (viewController != nil) {
         if ([[theUrl path] isEqualToString:@"/!gap_exec"]) {
@@ -122,10 +124,11 @@ static CDVViewController *viewControllerForRequest(NSURLRequest* request)
             }
             BOOL hasCmds = [queuedCommandsJSON length] > 0;
             if (hasCmds) {
-                SEL sel = @selector(enqueCommandBatch:);
+                SEL sel = @selector(enqueueCommandBatch:);
                 [viewController.commandQueue performSelectorOnMainThread:sel withObject:queuedCommandsJSON waitUntilDone:NO];
+                [viewController.commandQueue performSelectorOnMainThread:@selector(executePending) withObject:nil waitUntilDone:NO];
             } else {
-                SEL sel = @selector(maybeFetchCommandsFromJs:);
+                SEL sel = @selector(processXhrExecBridgePoke:);
                 [viewController.commandQueue performSelectorOnMainThread:sel withObject:[NSNumber numberWithInteger:[requestId integerValue]] waitUntilDone:NO];
             }
             // Returning NO here would be 20% faster, but it spams WebInspector's console with failure messages.
@@ -159,14 +162,14 @@ static CDVViewController *viewControllerForRequest(NSURLRequest* request)
     if ([[url path] isEqualToString:@"/!gap_exec"]) {
         [self sendResponseWithResponseCode:200 data:nil mimeType:nil];
         return;
-    } else if ([[url absoluteString] hasPrefix:kCDVAssetsLibraryPrefixs]) {
+    } else if ([[url absoluteString] hasPrefix:kCDVAssetsLibraryPrefixes]) {
         ALAssetsLibraryAssetForURLResultBlock resultBlock = ^(ALAsset* asset) {
             if (asset) {
                 // We have the asset!  Get the data and send it along.
                 ALAssetRepresentation* assetRepresentation = [asset defaultRepresentation];
                 NSString* MIMEType = (__bridge_transfer NSString*)UTTypeCopyPreferredTagWithClass((__bridge CFStringRef)[assetRepresentation UTI], kUTTagClassMIMEType);
-                Byte* buffer = (Byte*)malloc([assetRepresentation size]);
-                NSUInteger bufferSize = [assetRepresentation getBytes:buffer fromOffset:0.0 length:[assetRepresentation size] error:nil];
+                Byte* buffer = (Byte*)malloc((unsigned long)[assetRepresentation size]);
+                NSUInteger bufferSize = [assetRepresentation getBytes:buffer fromOffset:0.0 length:(NSUInteger)[assetRepresentation size] error:nil];
                 NSData* data = [NSData dataWithBytesNoCopy:buffer length:bufferSize freeWhenDone:YES];
                 [self sendResponseWithResponseCode:200 data:data mimeType:MIMEType];
             } else {
@@ -204,12 +207,21 @@ static CDVViewController *viewControllerForRequest(NSURLRequest* request)
         mimeType = @"text/plain";
     }
     NSString* encodingName = [@"text/plain" isEqualToString : mimeType] ? @"UTF-8" : nil;
-    CDVHTTPURLResponse* response =
-        [[CDVHTTPURLResponse alloc] initWithURL:[[self request] URL]
-                                       MIMEType:mimeType
-                          expectedContentLength:[data length]
-                               textEncodingName:encodingName];
-    response.statusCode = statusCode;
+
+#ifdef __IPHONE_8_0
+        NSHTTPURLResponse* response = [NSHTTPURLResponse alloc];
+#else
+        CDVHTTPURLResponse* response = [CDVHTTPURLResponse alloc];
+#endif
+
+    response = [response initWithURL:[[self request] URL]
+                            MIMEType:mimeType
+               expectedContentLength:[data length]
+                    textEncodingName:encodingName];
+
+#ifndef __IPHONE_8_0
+        response.statusCode = statusCode;
+#endif
 
     [[self client] URLProtocol:self didReceiveResponse:response cacheStoragePolicy:NSURLCacheStorageNotAllowed];
     if (data != nil) {
