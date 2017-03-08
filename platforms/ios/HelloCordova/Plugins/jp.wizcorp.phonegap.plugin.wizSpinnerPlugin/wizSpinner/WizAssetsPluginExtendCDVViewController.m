@@ -407,10 +407,7 @@
     
     
     int orientation = [UIApplication sharedApplication].statusBarOrientation;
-    
-    if (orientation != 1) {
-        [self rotateCustomLoader:orientation];
-    }
+    [self rotateCustomLoader:orientation];
 
     
     for (UIView*spinnerHolder in [UIApplication sharedApplication].keyWindow.subviews) {
